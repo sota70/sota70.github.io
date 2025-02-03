@@ -6,7 +6,7 @@
 
     <style>
         :root {
-            --accent-color: #FF4D4D;
+            --accent-color: #38b48b;
             --font-size: 17.5px;
         }
     </style>
@@ -21,21 +21,21 @@
     
     <title>sota70の独り言</title>
     <meta name="description" content="">
-    <meta name="keywords" content=''>
+    <meta name="keywords" content='sota70, security, web'>
 
     <meta property="og:url" content="http://localhost:1313/">
     <meta property="og:type" content="website">
     <meta property="og:title" content="sota70の独り言">
     <meta property="og:description" content="">
-    <meta property="og:image" content="http://localhost:1313/">
-    <meta property="og:image:secure_url" content="http://localhost:1313/">
+    <meta property="og:image" content="http://localhost:1313/images/ginchan.jpg">
+    <meta property="og:image:secure_url" content="http://localhost:1313/images/ginchan.jpg">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="sota70の独り言">
     <meta name="twitter:description" content="">
     <meta property="twitter:domain" content="http://localhost:1313/">
     <meta property="twitter:url" content="http://localhost:1313/">
-    <meta name="twitter:image" content="http://localhost:1313/">
+    <meta name="twitter:image" content="http://localhost:1313/images/ginchan.jpg">
 
     
     <link rel="canonical" href="http://localhost:1313/">
@@ -54,6 +54,26 @@
 
     
     
+        <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : false
+        });
+      });
+    </script>
+  
+    
 </head>
 <body>
         <script>
@@ -62,6 +82,12 @@
         </script><header class="header">
     <nav class="header-nav">
 
+        
+        <div class="avatar">
+            <a href="http://localhost:1313/">
+                <img src='/images/ginchan.jpg' alt="avatar">
+            </a>
+        </div>
         
 
         <div class="nav-title">
@@ -75,11 +101,7 @@
             </div>
             
             <div class="nav-link">
-                <a href="http://localhost:1313/tags/" aria-label="" > Tags </a>
-            </div>
-            
-            <div class="nav-link">
-                <a href="https://github.com" aria-label="github" ><span data-feather='github'></span>  </a>
+                <a href="https://github.com/sota70" aria-label="github" ><span data-feather='github'></span>  </a>
             </div>
             
 
@@ -106,11 +128,7 @@
                 </li>
                 
                 <li class="nav-item">
-                    <a href="http://localhost:1313/tags/" > Tags </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="https://github.com" ><span data-feather='github'></span>  </a>
+                    <a href="https://github.com/sota70" ><span data-feather='github'></span>  </a>
                 </li>
                 
                 <li class="nav-item dark-theme-toggle">
@@ -128,6 +146,8 @@
 <section class="home-about">
 	<div class="avatar">
         
+        <img class=size-m src='/images/ginchan.jpg' alt="avatar">
+        
 	</div>
 
     <h1>sota70の独り言</h1>
@@ -137,6 +157,24 @@
 
 <div class="flex-break"></div>
 
+
+<div class="gk-social-icons">
+    <ul class="gk-social-icons-list">
+        
+        <li class="gk-social-icon">
+            <a href="https://x.com/sotaonhaxtac"  aria-label="Learn more on twitter">
+                <img class="svg-inject" src="/svg/icons/twitter.svg" alt="">
+            </a>
+        </li>
+        
+        <li class="gk-social-icon">
+            <a href="https://github.com/sota70"  aria-label="Learn more on github">
+                <img class="svg-inject" src="/svg/icons/github.svg" alt="">
+            </a>
+        </li>
+        
+    </ul>
+</div>
 
 
 

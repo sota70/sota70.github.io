@@ -9,6 +9,13 @@
     <lastBuildDate>Mon, 03 Feb 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>About Old Blog</title>
+      <link>http://localhost:1313/posts/about-old-blog/</link>
+      <pubDate>Mon, 03 Feb 2025 16:02:07 +0900</pubDate>
+      <guid>http://localhost:1313/posts/about-old-blog/</guid>
+      <description>古いブログについて 前まではqiitaに技術ブログを投稿していたのですが、今年に入ってからgithub.ioの個人ブログに移行しました。&#xA;昔のブログが見たい方はこちらを参照してください。&#xA;マニアックな技術の話やCTFのwriteupを主に投稿しています。</description>
+    </item>
+    <item>
       <title>防衛省CTF 2025 Writeup</title>
       <link>http://localhost:1313/posts/mod-ctf-writeup/</link>
       <pubDate>Mon, 03 Feb 2025 09:13:45 +0900</pubDate>
