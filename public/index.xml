@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>sota70の独り言</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on sota70の独り言</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 03 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>防衛省CTF 2025 Writeup</title>
+      <link>http://localhost:1313/posts/test/</link>
+      <pubDate>Mon, 03 Feb 2025 09:13:45 +0900</pubDate>
+      <guid>http://localhost:1313/posts/test/</guid>
+      <description>はじめに 今回は防衛省CTFに参加してきました。&#xA;結果は以下の通りです。&#xA;久しぶりのCTFで張り切っていたので12時間ずっとCTFしていました。&#xA;かなりの問題数があるので私が面白いと思った問題だけ細かい解説を入れていきます。&#xA;PG 縮めるだけじゃダメ あるエクセルファイルが渡され、その中に記述されたフラグを抜き出す問題です。&#xA;中にはGET_FLAGというマクロがありました。&#xA;マクロの解析にはoletoolsを用いました。(https://github.com/decalage2/oletools/tree/master/oletools)&#xA;olevba 0.60.2 on Python 3.12.3 - http://decalage.info/python/oletools =============================================================================== FILE: PG-1.xlsm Type: OpenXML WARNING For now, VBA stomping cannot be detected for files in memory ------------------------------------------------------------------------------- VBA MACRO ThisWorkbook.cls in file: xl/vbaProject.bin - OLE stream: &amp;#39;VBA/ThisWorkbook&amp;#39; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - (empty macro) ------------------------------------------------------------------------------- VBA MACRO Sheet1.</description>
+    </item>
+  </channel>
+</rss>

