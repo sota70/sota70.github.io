@@ -176,7 +176,7 @@ PG 縮めるだけじゃダメ あるエクセルファイルが渡され、そ�
         <h2 id="はじめに">はじめに</h2>
 <p>今回は防衛省CTFに参加してきました。<br>
 結果は以下の通りです。<br>
-<img src="image.png" alt="alt text"><br>
+<img src="https://raw.githubusercontent.com/sota70/sota70.github.io/refs/heads/main/public/posts/test/image.png?raw=true" alt="alt text"><br>
 久しぶりのCTFで張り切っていたので12時間ずっとCTFしていました。<br>
 かなりの問題数があるので私が面白いと思った問題だけ細かい解説を入れていきます。</p>
 <h2 id="pg">PG</h2>
@@ -412,7 +412,7 @@ flag{
 emlファイルの解析ツールで解析します。<br>
 今回はこれを使いました。(<a href="https://github.com/ninoseki/eml_analyzer">https://github.com/ninoseki/eml_analyzer</a>)<br>
 解析結果の一部です。<br>
-<img src="image2.png" alt="alt text"><br>
+<img src="https://raw.githubusercontent.com/sota70/sota70.github.io/refs/heads/main/public/posts/test/image2.png?raw=true" alt="alt text"><br>
 Receivedヘッダが経由しているメールサーバが付与したIPアドレスになります。<br>
 Receivedヘッダはサーバを経由するごとにReceivedヘッダをメールサーバが付与していく仕組みになっています。<br>
 ヘッダを付与したタイムスタンプもあるので、それを参考に2番目に古いタイムスタンプを探します。<br>
@@ -478,7 +478,7 @@ HTTPパケットを中心に見ていくと、/image.phpエンドポイントに
 なのでそれが正しいパスワードになります。<br>
 これは殆どのパケットに言えることなのですが、リクエストとレスポンスを見たいときはFollow TCP StreamなどのFollow機能を使うと見やすいのでおすすめです。<br>
 今回の場合だとこうなります。<br>
-<img src="image3.png" alt="alt text"></p>
+<img src="https://raw.githubusercontent.com/sota70/sota70.github.io/refs/heads/main/public/posts/test/image3.png?raw=true" alt="alt text"></p>
 <pre tabindex="0"><code>flag{zyyzzyzy}
 </code></pre><h3 id="犯人はこの中にいる">犯人はこの中にいる！</h3>
 <p>個人的にFRの中で一番好きな問題です。<br>

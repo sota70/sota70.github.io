@@ -13,7 +13,7 @@ type: "post"
 
 今回は防衛省CTFに参加してきました。
 結果は以下の通りです。
-![alt text](image.png)
+![alt text](https://raw.githubusercontent.com/sota70/sota70.github.io/refs/heads/main/public/posts/test/image.png?raw=true)
 久しぶりのCTFで張り切っていたので12時間ずっとCTFしていました。
 かなりの問題数があるので私が面白いと思った問題だけ細かい解説を入れていきます。
 
@@ -296,7 +296,7 @@ flag{346D895B8FF3892191A645}
 emlファイルの解析ツールで解析します。
 今回はこれを使いました。(https://github.com/ninoseki/eml_analyzer)
 解析結果の一部です。
-![alt text](image2.png)
+![alt text](https://raw.githubusercontent.com/sota70/sota70.github.io/refs/heads/main/public/posts/test/image2.png?raw=true)
 Receivedヘッダが経由しているメールサーバが付与したIPアドレスになります。
 Receivedヘッダはサーバを経由するごとにReceivedヘッダをメールサーバが付与していく仕組みになっています。
 ヘッダを付与したタイムスタンプもあるので、それを参考に2番目に古いタイムスタンプを探します。
@@ -395,7 +395,7 @@ ftp
 なのでそれが正しいパスワードになります。
 これは殆どのパケットに言えることなのですが、リクエストとレスポンスを見たいときはFollow TCP StreamなどのFollow機能を使うと見やすいのでおすすめです。
 今回の場合だとこうなります。
-![alt text](image3.png)
+![alt text](https://raw.githubusercontent.com/sota70/sota70.github.io/refs/heads/main/public/posts/test/image3.png?raw=true)
 ```
 flag{zyyzzyzy}
 ```
