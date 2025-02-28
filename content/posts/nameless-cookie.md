@@ -28,13 +28,15 @@ set-cookie-string = cookie-pair *( ";" SP cookie-av )
 cookie-pair       = cookie-name "=" cookie-value
 cookie-name       = token
 ```
+cookie-pairはcookie-nameとcookie-valueの組み合わせとなっています。
+cookie-nameの定義を確かめるためにtokenの定義を確認します。
 tokenはRFC2616から参照しています。
 https://datatracker.ietf.org/doc/html/rfc2616#section-2.2
 ```
 token          = 1*<any CHAR except CTLs or separators>
 ```
 このことからクッキーの名前は最低でも特殊文字を除く1文字が必要だということが分かります。
-Nameless CookieはRFC6265bisで明確に使うべきでないと主張しています。
+Nameless CookieはRFC6265bisで明確に使うべきでないとも主張しています。
 https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis
 ```
 Per the grammar above, servers SHOULD NOT produce nameless cookies (i.e.: an empty cookie-name) as such cookies may be unpredictably serialized by UAs when sent back to the server.
