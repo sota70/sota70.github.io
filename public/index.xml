@@ -6,8 +6,15 @@
     <description>Recent content on sota70の独り言</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 03 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 28 Feb 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Nameless Cookieを用いたクッキーチェックのバイパス</title>
+      <link>http://localhost:1313/posts/nameless-cookie/</link>
+      <pubDate>Fri, 28 Feb 2025 17:19:28 +0900</pubDate>
+      <guid>http://localhost:1313/posts/nameless-cookie/</guid>
+      <description>はじめに Nameless Cookieは名前無しクッキーとも言われ、名前が存在せず値だけが存在するクッキーのことです。&#xA;今回は名前無しクッキーを利用して特定のクッキーのセットを拒否するチェックをバイパスする方法を解説します。&#xA;Nameless Cookieとは Nameless Cookieとは名前が存在せず、値だけが存在するクッキーのことです。&#xA;Cookie: =value ですがこれは非推奨のクッキーです。&#xA;これはRFC6265のクッキーの定義を見ることでも分かります。&#xA;https://datatracker.ietf.org/doc/html/rfc6265#section-4.1&#xA;set-cookie-string = cookie-pair *( &amp;#34;;&amp;#34; SP cookie-av ) cookie-pair = cookie-name &amp;#34;=&amp;#34; cookie-value cookie-name = token tokenはRFC2616から参照しています。&#xA;https://datatracker.ietf.org/doc/html/rfc2616#section-2.2&#xA;token = 1*&amp;lt;any CHAR except CTLs or separators&amp;gt; このことからクッキーの名前は最低でも特殊文字を除く1文字が必要だということが分かります。&#xA;Nameless CookieはRFC6265bisで明確に使うべきでないと主張しています。&#xA;https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis&#xA;Per the grammar above, servers SHOULD NOT produce nameless cookies (i.e.: an empty cookie-name) as such cookies may be unpredictably serialized by UAs when sent back to the server.</description>
+    </item>
     <item>
       <title>About Old Blog</title>
       <link>http://localhost:1313/posts/about-old-blog/</link>
