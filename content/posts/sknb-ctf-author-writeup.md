@@ -351,7 +351,7 @@ sknb{REDACTED}
 This extract function's behavior can be found in certain databases. SQL Alchemy supports multiple databases, so each behavior is slightly different. For instance, SQLite's extract function doesn't allow SQL Injection since only the characters defined in extract_map are allowed.
 
 https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/dialects/sqlite/base.py#L1466
-```py {linenos=inline lineStartNo=1466}
+```py {linenos=inline lineNoStart=1466}
     def visit_extract(self, extract, **kw):
         try:
             return "CAST(STRFTIME('%s', %s) AS INTEGER)" % (
@@ -365,7 +365,7 @@ https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/dialects
 ```
 
 https://github.com/sqlalchemy/sqlalchemy/blob/rel_2_0_43/lib/sqlalchemy/dialects/sqlite/base.py#L1419
-```py {linenos=inline lineStartNo=1419}
+```py {linenos=inline lineNoStart=1419}
     extract_map = util.update_copy(
         compiler.SQLCompiler.extract_map,
         {
@@ -635,7 +635,7 @@ serve({
 The goal is to retrieve the flag by setting req.query.user to admin, however WAF is blocking it in frontend.
 
 app/frontend/index.js
-```js {lineNos=inline lineStartNo=9}
+```js {lineNos=inline lineNoStart=9}
 const waf = (mode) => {
   if (mode) {
     return mode === "admin";
@@ -815,7 +815,7 @@ app.listen(port, () => {
 The goal is to set `flag=true` in bot's cookie. However, WAF is blocking it.
 
 bot/src/index.js
-```js {linenos=inline lineStartNo=13}
+```js {linenos=inline lineNoStart=13}
     const whitelist = /^[a-zA-Z0-9=;\/]+$/
     const cookies = cookie.split(";");
     for (const pair of cookies) {
@@ -855,7 +855,7 @@ So it is possible to set flag to true with the following cookie.
 However, flag cookie is already set by visit function.
 
 bot/src/index.js
-```js {linenos=inline lineStartNo=33}
+```js {linenos=inline lineNoStart=33}
     await context.setCookie({
         domain: "localhost",
         name: "flag",
